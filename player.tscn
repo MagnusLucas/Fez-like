@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://cavcp1xuig2xj"]
+
+[ext_resource type="Script" uid="uid://cqs7ndolcr3h3" path="res://player.gd" id="1_4flbx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sh265"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_4flbx"]
+material = SubResource("StandardMaterial3D_sh265")
+radius = 0.25
+height = 0.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_onrkg"]
+radius = 0.25
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_4flbx")
+
+[node name="Player" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_4flbx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_onrkg")
