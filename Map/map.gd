@@ -19,6 +19,8 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("rotate_left"):
-		rotate(Vector3.UP, PI/2)
+		var tween = get_tree().create_tween()
+		tween.tween_property(self, "rotation:y", rotation.y + PI/2, 1)
 	if Input.is_action_just_pressed("rotate_right"):
-		rotate(Vector3.UP, -PI/2)
+		var tween = get_tree().create_tween()
+		tween.tween_property(self, "rotation:y", rotation.y - PI/2, 1)
