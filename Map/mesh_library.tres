@@ -60,11 +60,11 @@ data = {
 [sub_resource type="ImageTexture" id="ImageTexture_432on"]
 image = SubResource("Image_i7414")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t7hg2"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rxp2o"]
 albedo_color = Color(1, 0, 1, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_rxp2o"]
-material = SubResource("StandardMaterial3D_t7hg2")
+material = SubResource("StandardMaterial3D_rxp2o")
 radius = 0.05
 height = 0.1
 
@@ -105,7 +105,7 @@ item/2/shapes = []
 item/2/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/2/navigation_layers = 1
 item/2/preview = SubResource("ImageTexture_432on")
-item/3/name = "PlayerMarker"
+item/3/name = "Player"
 item/3/mesh = SubResource("SphereMesh_rxp2o")
 item/3/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/3/mesh_cast_shadow = 1

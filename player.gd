@@ -1,9 +1,21 @@
 extends CharacterBody3D
 class_name Player
 
-func _process(_delta: float) -> void:
+const GRAVITY = 10
+const SPEED = 2
+const JUMP_STRENGTH = 20
+
+
+
+func _process(delta: float) -> void:
+	if !is_on_floor():
+		velocity.y -= GRAVITY * delta
+	else:
+		velocity.y = 0
 	if Input.is_action_just_pressed("go_left"):
-		velocity.x -= 2
+		velocity.x -= SPEED
 	if Input.is_action_just_pressed("go_right"):
-		velocity.x += 2
+		velocity.x += SPEED
+	if Input.is_action_just_pressed("jump"):
+		velocity.y += JUMP_STRENGTH
 	move_and_slide()

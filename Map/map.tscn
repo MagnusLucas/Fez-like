@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://clpoi7ggf0pur"]
+[gd_scene load_steps=4 format=3 uid="uid://clpoi7ggf0pur"]
 
 [ext_resource type="MeshLibrary" uid="uid://dkjwbfrjn1hdo" path="res://Map/mesh_library.tres" id="1_c7s6e"]
 [ext_resource type="Script" uid="uid://b363upmfmhid" path="res://Map/map.gd" id="2_njngi"]
+[ext_resource type="Script" uid="uid://sbliytswwjwo" path="res://camera.gd" id="3_6yc6o"]
 
 [node name="Map" type="GridMap"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, -0.5)
@@ -12,3 +13,11 @@ data = {
 }
 script = ExtResource("2_njngi")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="CameraOrigin" type="Node3D" parent="."]
+script = ExtResource("3_6yc6o")
+
+[node name="Camera3D" type="Camera3D" parent="CameraOrigin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+projection = 1
+size = 5.0

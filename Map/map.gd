@@ -2,25 +2,27 @@ extends GridMap
 class_name Map
 
 const PLAYER_SCENE = preload("res://player.tscn")
-const DOOR_SCENE = preload("res://door.tscn")
+const DOOR_SCENE = preload("res://Map/door.tscn")
 
+const SCRIPTED_SCENES : Dictionary[String, Resource] = {
+	"Player" : PLAYER_SCENE,
+	"Door" : DOOR_SCENE,
+}
+
+@export var camera_follows_player : bool = true
 
 func _ready() -> void:
+	_instantiate_scripted_scenes()
+	if camera_follows_player:
+		var player = find_child("Player")
+		$CameraOrigin.player = player
+
+func _instantiate_scripted_scenes() -> void:
 	var used_cells = get_used_cells()
 	for cell_position in used_cells:
-		if get_cell_item(cell_position) == mesh_library.find_item_by_name("PlayerMarker"):
-			var player = PLAYER_SCENE.instantiate()
-			add_child(player)
-			player.position = map_to_local(cell_position)
-		if get_cell_item(cell_position) == mesh_library.find_item_by_name("Door"):
-			var door = DOOR_SCENE.instantiate()
-			add_child(door)
-			door.position = map_to_local(cell_position)
-
-func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("rotate_left"):
-		var tween = get_tree().create_tween()
-		tween.tween_property(self, "rotation:y", rotation.y + PI/2, 1)
-	if Input.is_action_just_pressed("rotate_right"):
-		var tween = get_tree().create_tween()
-		tween.tween_property(self, "rotation:y", rotation.y - PI/2, 1)
+		var item = get_cell_item(cell_position)
+		var item_name = mesh_library.get_item_name(item)
+		if item_name in SCRIPTED_SCENES:
+			var instance = SCRIPTED_SCENES[item_name].instantiate()
+			add_child(instance, true)
+			instance.position = map_to_local(cell_position)

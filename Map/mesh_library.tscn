@@ -24,11 +24,11 @@ material = SubResource("StandardMaterial3D_6xjuo")
 radius = 0.05
 height = 0.1
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t7hg2"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rxp2o"]
 albedo_color = Color(1, 0, 1, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_g2w8g"]
-material = SubResource("StandardMaterial3D_t7hg2")
+material = SubResource("StandardMaterial3D_rxp2o")
 radius = 0.05
 height = 0.1
 
@@ -55,6 +55,5 @@ shape = SubResource("BoxShape3D_t7hg2")
 [node name="Door" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_06nhj")
 
-[node name="PlayerMarker" type="MeshInstance3D" parent="."]
-visible = false
+[node name="Player" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_g2w8g")
