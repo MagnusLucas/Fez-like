@@ -1,12 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://8g251bbap0xl"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g2w8g"]
-albedo_color = Color(0.28485, 0.28485, 0.28485, 1)
+[ext_resource type="ArrayMesh" uid="uid://g5vnqfomdo7y" path="res://Map/brick-mesh.res" id="1_06nhj"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_jo043"]
-material = SubResource("StandardMaterial3D_g2w8g")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_t7hg2"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_to5if"]
+size = Vector3(0.02, 0.02, 0.02)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jo043"]
 albedo_color = Color(0, 0, 0, 1)
@@ -15,6 +12,8 @@ albedo_color = Color(0, 0, 0, 1)
 material = SubResource("StandardMaterial3D_jo043")
 radius = 0.05
 height = 0.1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_06nhj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6xjuo"]
 albedo_color = Color(0.358207, 0.126089, 0, 1)
@@ -35,25 +34,26 @@ height = 0.1
 [node name="MeshLibrary" type="Node3D"]
 
 [node name="Wall" type="MeshInstance3D" parent="."]
-visible = false
-mesh = SubResource("BoxMesh_jo043")
+transform = Transform3D(50, 0, 0, 0, -2.18557e-06, -50, 0, 50, -2.18557e-06, 0, 0, 0)
+mesh = ExtResource("1_06nhj")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Wall"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Wall/StaticBody3D"]
-shape = SubResource("BoxShape3D_t7hg2")
+shape = SubResource("BoxShape3D_to5if")
 
 [node name="InvisibleWall" type="MeshInstance3D" parent="."]
-visible = false
 mesh = SubResource("SphereMesh_t7hg2")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="InvisibleWall"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InvisibleWall/StaticBody3D"]
-shape = SubResource("BoxShape3D_t7hg2")
+shape = SubResource("BoxShape3D_06nhj")
 
 [node name="Door" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("SphereMesh_06nhj")
 
 [node name="Player" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("SphereMesh_g2w8g")
