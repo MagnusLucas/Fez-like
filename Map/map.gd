@@ -3,10 +3,12 @@ class_name Map
 
 const PLAYER_SCENE = preload("res://player.tscn")
 const DOOR_SCENE = preload("res://Map/door.tscn")
+const BASE_CELL_COLLIDER_SCENE = preload("res://Map/base_cell_collider.tscn")
 
 const SCRIPTED_SCENES : Dictionary[String, Resource] = {
 	"Player" : PLAYER_SCENE,
 	"Door" : DOOR_SCENE,
+	"InvisibleWall" : BASE_CELL_COLLIDER_SCENE,
 }
 
 @export var camera_follows_player : bool = true
@@ -29,3 +31,4 @@ func _instantiate_scripted_scenes() -> void:
 			var instance = SCRIPTED_SCENES[item_name].instantiate()
 			add_child(instance, true)
 			instance.position = map_to_local(cell_position)
+			set_cell_item(cell_position, INVALID_CELL_ITEM)

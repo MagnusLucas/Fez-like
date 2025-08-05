@@ -1,4 +1,4 @@
-[gd_resource type="MeshLibrary" load_steps=20 format=4 uid="uid://dkjwbfrjn1hdo"]
+[gd_resource type="MeshLibrary" load_steps=19 format=4 uid="uid://dkjwbfrjn1hdo"]
 
 [ext_resource type="Texture2D" uid="uid://dr32hidhbc5pd" path="res://Map/m_sandy_brick_with_grass_sandy_brick_with_grass_tile_texture.png" id="1_vc2d0"]
 
@@ -60,8 +60,6 @@ data = {
 [sub_resource type="ImageTexture" id="ImageTexture_cnfc0"]
 image = SubResource("Image_i7414")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_06nhj"]
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6xjuo"]
 albedo_color = Color(0.358207, 0.126089, 0, 1)
 
@@ -115,7 +113,7 @@ item/1/name = "InvisibleWall"
 item/1/mesh = SubResource("SphereMesh_to5if")
 item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/1/mesh_cast_shadow = 1
-item/1/shapes = [SubResource("BoxShape3D_06nhj"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/1/shapes = [SubResource("BoxShape3D_to5if"), Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)]
 item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/1/navigation_layers = 1
 item/1/preview = SubResource("ImageTexture_cnfc0")
