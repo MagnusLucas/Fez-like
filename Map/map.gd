@@ -14,8 +14,11 @@ const SCRIPTED_SCENES : Dictionary[String, Resource] = {
 func _ready() -> void:
 	_instantiate_scripted_scenes()
 	if camera_follows_player:
-		var player = find_child("Player", false, false)
+		var player : Player = find_child("Player", false, false)
 		$CameraOrigin.player = player
+		
+		$CameraOrigin.connect("camera_rotation_started", player.stop_movement)
+		$CameraOrigin.connect("camera_rotation_finished", player.update_rotation)
 
 func _instantiate_scripted_scenes() -> void:
 	var used_cells = get_used_cells()
