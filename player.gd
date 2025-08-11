@@ -8,9 +8,12 @@ const JUMP_STRENGTH = 5
 const POSITION_CHECK_PERIOD = 0.2
 
 func _ready() -> void:
-	_check_position()
+	if get_parent() is Map:
+		_check_position()
 
 func _process(delta: float) -> void:
+	var previous_velocity : Vector3 = velocity
+	
 	if !is_on_floor():
 		velocity -= basis.y * GRAVITY * delta
 	if Input.is_action_just_pressed("go_left"):
@@ -20,20 +23,27 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump"):
 		velocity += basis.y * JUMP_STRENGTH
 	move_and_slide()
+	
+	if previous_velocity == Vector3.ZERO and velocity != Vector3.ZERO:
+		$AnimatedSprite3D.play("walk")
+	elif previous_velocity != Vector3.ZERO and velocity == Vector3.ZERO:
+		$AnimatedSprite3D.play("idle")
 
 func _check_position():
 	var map : Map = get_parent()
 	get_tree().create_timer(POSITION_CHECK_PERIOD).timeout.connect(_check_position)
 	
 	var future_cell_position : Vector3i = map.local_to_map(position + map.cell_size * velocity.normalized())
-	var current_cell_position : Vector3i = map.local_to_map(position)
-	print(current_cell_position, " ", future_cell_position)
 	
 	var mesh_id : int = map.get_cell_item(future_cell_position)
-	if mesh_id == map.INVALID_CELL_ITEM:
-		print("Empty")
-	else:
-		print(map.mesh_library.get_item_name(mesh_id))
+	
+	# if not is on floor - look for floor
+	# if is on floor - look if view obstructed, keep on floor
+	if mesh_id != map.INVALID_CELL_ITEM:
+		var item_name : String = map.mesh_library.get_item_name(mesh_id)
+		if !is_on_floor() and item_name == "Wall":
+			return
+		print(item_name)
 	
 
 func stop_movement():
