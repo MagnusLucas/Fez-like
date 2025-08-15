@@ -23,9 +23,10 @@ func _process(delta: float) -> void:
 		velocity += basis.y * JUMP_STRENGTH
 	
 	_update_facing_direction()
-	_update_animation(previous_velocity)
 	
 	move_and_slide()
+	
+	_update_animation(previous_velocity)
 	
 
 
@@ -52,7 +53,8 @@ func _check_position():
 	
 	# if not is on floor - look for floor
 	# if is on floor - look if view obstructed, keep on floor
-	if mesh_id != map.INVALID_CELL_ITEM:
+	const EMPTY_CELL_ID : int = map.INVALID_CELL_ITEM
+	if mesh_id != EMPTY_CELL_ID:
 		var item_name : String = map.mesh_library.get_item_name(mesh_id)
 		if !is_on_floor() and item_name == "Wall":
 			return
