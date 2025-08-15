@@ -13,7 +13,6 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	var previous_velocity : Vector3 = velocity
-	
 	if !is_on_floor():
 		velocity -= basis.y * GRAVITY * delta
 	if Input.is_action_just_pressed("go_left"):
@@ -22,8 +21,22 @@ func _process(delta: float) -> void:
 		velocity += basis.x * SPEED
 	if Input.is_action_just_pressed("jump"):
 		velocity += basis.y * JUMP_STRENGTH
+	
+	_update_facing_direction()
+	_update_animation(previous_velocity)
+	
 	move_and_slide()
 	
+
+
+# Making the player face the right direction - to be optimized
+func _update_facing_direction():
+	if velocity.x < 0 or velocity.z > 0:
+		$AnimatedSprite3D.flip_h = true
+	elif velocity.x > 0 or velocity.z < 0:
+		$AnimatedSprite3D.flip_h = false
+
+func _update_animation(previous_velocity : Vector3):
 	if previous_velocity == Vector3.ZERO and velocity != Vector3.ZERO:
 		$AnimatedSprite3D.play("walk")
 	elif previous_velocity != Vector3.ZERO and velocity == Vector3.ZERO:
