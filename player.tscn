@@ -84,6 +84,8 @@ shape = SubResource("SphereShape3D_onrkg")
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 transform = Transform3D(0.535, 0, 0, 0, 0.535, 0, 0, 0, 0.535, 0, 0, 0)
 billboard = 1
+no_depth_test = true
+render_priority = 1
 sprite_frames = SubResource("SpriteFrames_urp6f")
 animation = &"walk"
 autoplay = "idle"

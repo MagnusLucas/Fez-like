@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://djwj3jnfybfg1"]
+
+[ext_resource type="MeshLibrary" uid="uid://dkjwbfrjn1hdo" path="res://Map/mesh_library.tres" id="1_p7rxw"]
+[ext_resource type="Script" uid="uid://b363upmfmhid" path="res://Map/map.gd" id="2_yitik"]
+[ext_resource type="Script" uid="uid://sbliytswwjwo" path="res://camera.gd" id="3_g2v4t"]
+
+[node name="Map" type="GridMap"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, -0.52205)
+mesh_library = ExtResource("1_p7rxw")
+cell_size = Vector3(1, 1, 1)
+data = {
+"cells": PackedInt32Array(0, 0, 0, 5, 0, 0, 10, 0, 0, 65531, 0, 0, 65526, 0, 0, 0, 2, 0, 65531, 2, 0, 65526, 2, 0, 5, 2, 0, 10, 2, 0, 65526, 65534, 0, 65531, 65534, 0, 0, 65534, 0, 5, 65534, 0, 10, 65534, 0, -655360, 0, 0, -655355, 0, 0, -655350, 0, 0, -589829, 0, 0, -589834, 0, 0, 655360, 0, 0, 720891, 0, 0, 720886, 0, 0, 655365, 0, 0, 655370, 0, 0, 65536, 0, 3, 131067, 0, 0, 65536, 65534, 0)
+}
+script = ExtResource("2_yitik")
+metadata/_editor_floor_ = Vector3(0, 1, 0)
+
+[node name="CameraOrigin" type="Node3D" parent="."]
+script = ExtResource("3_g2v4t")
+
+[node name="Camera3D" type="Camera3D" parent="CameraOrigin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 23.119)
+projection = 1
+size = 30.0
+far = 100.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 9.4832, 31.8312)
+current = true

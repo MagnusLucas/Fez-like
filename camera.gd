@@ -1,4 +1,5 @@
 extends Node3D
+class_name CameraOrigin
 
 var can_rotate : bool = true
 
@@ -33,3 +34,6 @@ func tween_y_rotation(angle_radians : float) -> void:
 		can_rotate = true
 		camera_rotation_finished.emit(basis)
 	)
+
+func get_camera_normal() -> Vector3:
+	return Vector3.FORWARD * basis
