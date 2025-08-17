@@ -32,3 +32,6 @@ func _instantiate_scripted_scenes() -> void:
 			add_child(instance, true)
 			instance.position = map_to_local(cell_position)
 			set_cell_item(cell_position, INVALID_CELL_ITEM)
+
+func cell_in_view(cell_position : Vector3i) -> bool:
+	return true
