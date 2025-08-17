@@ -62,9 +62,9 @@ func _check_position() -> void:
 	# might look for ceiling to hit when done like that...
 	if !is_on_floor() and future_mesh_id == EMPTY_CELL_ID:
 		print_debug("Looking for ground to fall on")
-		#var correct_cell_position : Vector3i = map.find_cell_in_row(map.mesh_library.find_item_by_name("Wall"))
-		#if correct_cell_position:
-			#move_to_cell(correct_cell_position)
+		var if_found_coordinates = map.find_ground(future_cell_position, basis.y)
+		if if_found_coordinates[0]:
+			move_to_cell(if_found_coordinates[1])
 	
 	if is_on_floor():
 		if !map.cell_in_view(future_cell_position):

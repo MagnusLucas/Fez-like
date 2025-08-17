@@ -84,6 +84,27 @@ func get_visible_cells_in_axis(cell_in_axis : Vector3i, axis : Vector3) -> AABB:
 				return AABB(cell_position, first_axis_cell - cell_position)
 	return AABB(last_axis_cell, first_axis_cell - last_axis_cell)
 
+# [found_correct_ground : bool, ground_coordinates]
+func find_ground(player_position : Vector3i, player_down : Vector3i = Vector3i.DOWN) -> Array:
+	var used_AABB : AABB = get_used_AABB()
+	var axis : Vector3 = camera_origin.get_camera_normal()
+	var axis_coordinates = (Vector3.ONE - abs(axis)) * Vector3(player_position)
+	
+	# Making sure the iteration always goes along FORWARD of camera, so that first seen cell is the end of view
+	var first_axis_cell : Vector3i = (used_AABB.end if axis == abs(axis) 
+		else used_AABB.position) * axis + axis_coordinates
+	var _last_axis_cell : Vector3i = (used_AABB.position if axis == abs(axis) 
+		else used_AABB.end) * axis + axis_coordinates
+	
+	for coordinate in abs(axis.dot(used_AABB.size)) + 1:
+		var cell_position : Vector3i = Vector3(first_axis_cell) - abs(axis) * coordinate
+		
+		# first_cell > cell_position > last_cell
+		if (get_cell_item(cell_position) != INVALID_CELL_ITEM and 
+			get_cell_item(cell_position + player_down) == INVALID_CELL_ITEM):
+			return [true, cell_position]
+	return [false, Vector3i.ZERO]
+
 func cell_in_view(cell_position : Vector3i) -> bool:
 	var camera_normal : Vector3i = camera_origin.get_camera_normal()
 	return get_visible_cells_in_axis(cell_position, camera_normal).has_point(cell_position)
