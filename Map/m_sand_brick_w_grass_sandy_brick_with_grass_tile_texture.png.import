@@ -2,10 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dr32hidhbc5pd"
-path="res://.godot/imported/m_sand_brick_w_grass_tile_texture.png-5225f37d1883733646e5998141ea25f3.ctex"
+uid="uid://cia3tnaycm0q1"
+path.s3tc="res://.godot/imported/m_sand_brick_w_grass_sandy_brick_with_grass_tile_texture.png-f464b77cdb59bce980b16c35c8efea78.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "99b4c5d8726448e1aef98d04c6cfef8d"
@@ -13,12 +14,12 @@ generator_parameters={
 
 [deps]
 
-source_file="res://Map/m_sand_brick_w_grass_tile_texture.png"
-dest_files=["res://.godot/imported/m_sand_brick_w_grass_tile_texture.png-5225f37d1883733646e5998141ea25f3.ctex"]
+source_file="res://Map/m_sand_brick_w_grass_sandy_brick_with_grass_tile_texture.png"
+dest_files=["res://.godot/imported/m_sand_brick_w_grass_sandy_brick_with_grass_tile_texture.png-f464b77cdb59bce980b16c35c8efea78.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

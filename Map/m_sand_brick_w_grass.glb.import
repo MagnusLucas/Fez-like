@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cxslvadebj07l"
-path="res://.godot/imported/m_sandy_brick_with_grass.glb-51e80ab0b18f9af75745c3d0ed445133.scn"
+path="res://.godot/imported/m_sand_brick_w_grass.glb-7b528a20468ec949ada9c8a12166a34d.scn"
 
 [deps]
 
-source_file="res://Map/m_sandy_brick_with_grass.glb"
-dest_files=["res://.godot/imported/m_sandy_brick_with_grass.glb-51e80ab0b18f9af75745c3d0ed445133.scn"]
+source_file="res://Map/m_sand_brick_w_grass.glb"
+dest_files=["res://.godot/imported/m_sand_brick_w_grass.glb-7b528a20468ec949ada9c8a12166a34d.scn"]
 
 [params]
 
