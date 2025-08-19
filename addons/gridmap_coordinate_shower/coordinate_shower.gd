@@ -5,6 +5,9 @@ var gme : GridMapEditorPlugin
 
 var font : Font
 
+var debug : bool = true
+var debug_label : Label
+
 func _enter_tree() -> void:
 	# Initialization of the plugin goes here.
 	var root = get_editor_interface().get_resource_filesystem().get_node("/root")
@@ -14,12 +17,26 @@ func _enter_tree() -> void:
 	font = output_label.get_theme_font("font")
 	output_label.free()
 	
+	if debug:
+		debug_label = preload("res://addons/gridmap_coordinate_shower/coordinate_label.tscn").instantiate()
+		add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_BOTTOM, debug_label)
+	
 	set_force_draw_over_forwarding_enabled()
 
+func _exit_tree() -> void:
+	if debug:
+		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_BOTTOM, debug_label)
+		debug_label.free()
 
 func _handles(object: Object) -> bool:
 	return object is GridMap
 
+func _make_visible(visible: bool) -> void:
+	if debug:
+		if visible:
+			debug_label.show()
+		else:
+			debug_label.hide()
 
 func _get_selection_coordinate_string() -> String:
 	if !gme.has_selection():
@@ -38,6 +55,10 @@ func _get_hover_coordinates_string() -> String:
 	
 	
 	return str(mouse_position)
+
+func _process(delta: float) -> void:
+	if debug:
+		debug_label.text = _get_selection_coordinate_string()
 
 func _forward_3d_force_draw_over_viewport(overlay : Control):
 	overlay.draw_string_outline(font, Vector2(5, overlay.size.y - 5) ,_get_hover_coordinates_string(), 
