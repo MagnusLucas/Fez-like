@@ -50,7 +50,7 @@ func _get_selection_coordinate_string() -> String:
 
 func _get_hover_coordinates_string() -> String:
 	var viewport : SubViewport = EditorInterface.get_editor_viewport_3d(0)
-	var viewport_position : Vector2 = viewport.global_canvas_transform.get_origin()
+	var viewport_position : Vector2 = viewport.get_parent().global_position
 	
 	var mouse_position = viewport.get_mouse_position()
 	var current_gridmap = gme.get_current_grid_map()
@@ -59,8 +59,9 @@ func _get_hover_coordinates_string() -> String:
 	
 	#XD
 	# emit click, get selection, then undo
-	if viewport.get_visible_rect().has_point(mouse_position + viewport_position) and current_gridmap:
+	if viewport.get_visible_rect().has_point(mouse_position) and current_gridmap:
 		var mouse_was_pressed : bool = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+		var had_selection : bool = gme.has_selection()
 		var current_selection : AABB
 		
 		if mouse_was_pressed:
@@ -70,11 +71,11 @@ func _get_hover_coordinates_string() -> String:
 			
 			current_selection = gme.get_selection()
 			Input.parse_input_event(release)
-			gme.clear_selection()
+			#gme.clear_selection()
 		
 		var click = InputEventMouseButton.new()
-		click.global_position = viewport_position
-		click.position = mouse_position + Vector2(290, 120)
+		click.global_position = viewport_position + mouse_position
+		click.position = viewport_position + mouse_position
 		click.pressed = true
 		click.button_index = MOUSE_BUTTON_LEFT
 		Input.parse_input_event(click)
@@ -84,19 +85,19 @@ func _get_hover_coordinates_string() -> String:
 		Input.parse_input_event(release)
 		
 		coordinates = gme.get_selection().position
-		print(coordinates)
+		#print(coordinates)
 		
 		var undo : InputEventAction = InputEventAction.new()
 		undo.action = "ui_undo"
 		undo.pressed = true
 		Input.parse_input_event(undo)
 		
-		if mouse_was_pressed:
-			var press = click.duplicate()
-			Input.parse_input_event(press)
-			
-			gme.set_selection(current_selection.position.min(coordinates),
-				abs(current_selection.position - Vector3(coordinates)))
+		#if had_selection:
+			#var press = click.duplicate()
+			#Input.parse_input_event(press)
+			#
+			#gme.set_selection(current_selection.position.min(coordinates),
+				#current_selection.position.min(coordinates) + abs(current_selection.position - Vector3(coordinates)))
 		
 		return str(coordinates)
 	
