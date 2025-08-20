@@ -8,6 +8,7 @@ var font : Font
 const DEBUG : bool = true
 var debug_label : Label
 
+
 func _enter_tree() -> void:
 	# Initialization of the plugin goes here.
 	var root = get_editor_interface().get_resource_filesystem().get_node("/root")
@@ -61,7 +62,6 @@ func _get_hover_coordinates_string() -> String:
 	# emit click, get selection, then undo
 	if viewport.get_visible_rect().has_point(mouse_position) and current_gridmap:
 		var mouse_was_pressed : bool = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-		var had_selection : bool = gme.has_selection()
 		var current_selection : AABB
 		
 		if mouse_was_pressed:
@@ -71,7 +71,7 @@ func _get_hover_coordinates_string() -> String:
 			
 			current_selection = gme.get_selection()
 			Input.parse_input_event(release)
-			#gme.clear_selection()
+			gme.clear_selection()
 		
 		var click = InputEventMouseButton.new()
 		click.global_position = viewport_position + mouse_position
@@ -82,22 +82,25 @@ func _get_hover_coordinates_string() -> String:
 		
 		var release = click.duplicate()
 		release.pressed = false
+		click.global_position = viewport_position + mouse_position
+		click.position = viewport_position + mouse_position
 		Input.parse_input_event(release)
 		
 		coordinates = gme.get_selection().position
-		#print(coordinates)
+		#gme.clear_selection()
 		
-		var undo : InputEventAction = InputEventAction.new()
-		undo.action = "ui_undo"
-		undo.pressed = true
-		Input.parse_input_event(undo)
+		#var undo : InputEventAction = InputEventAction.new()
+		#undo.action = "ui_undo"
+		#undo.pressed = true
+		#Input.parse_input_event(undo)
 		
-		#if had_selection:
-			#var press = click.duplicate()
-			#Input.parse_input_event(press)
-			#
-			#gme.set_selection(current_selection.position.min(coordinates),
-				#current_selection.position.min(coordinates) + abs(current_selection.position - Vector3(coordinates)))
+		if mouse_was_pressed:
+			var press : InputEventMouseButton = click.duplicate()
+			Input.parse_input_event(press)
+			print(current_selection, "  ", coordinates, current_selection.position.min(coordinates), 
+				current_selection.position.min(coordinates) + abs(current_selection.position - Vector3(coordinates)))
+			gme.set_selection(current_selection.position.min(coordinates),
+				current_selection.position.min(coordinates) + abs(current_selection.position - Vector3(coordinates)))
 		
 		return str(coordinates)
 	
@@ -109,8 +112,9 @@ func _process(delta: float) -> void:
 		debug_label.text = _get_selection_coordinate_string()
 
 func _forward_3d_force_draw_over_viewport(overlay : Control):
-	overlay.draw_string_outline(font, Vector2(5, overlay.size.y - 5) , _get_hover_coordinates_string(), 
+	var coordinates : String = _get_hover_coordinates_string()
+	overlay.draw_string_outline(font, Vector2(5, overlay.size.y - 5) , coordinates, 
 		HORIZONTAL_ALIGNMENT_LEFT, -1, 14, 2, Color.BLACK)
-	overlay.draw_string(font, Vector2(5, overlay.size.y - 5) , _get_hover_coordinates_string(), 
+	overlay.draw_string(font, Vector2(5, overlay.size.y - 5) , coordinates, 
 		HORIZONTAL_ALIGNMENT_LEFT, -1, 14)
 	
