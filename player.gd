@@ -34,6 +34,10 @@ func _handle_input() -> void:
 	if Input.is_action_just_pressed("jump"):
 		velocity += basis.y * JUMP_STRENGTH
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
+		_check_position()
+
 # Making the player face the right direction - to be optimized
 func _update_facing_direction() -> void:
 	if (Vector3.RIGHT * basis * velocity).x < 0:
@@ -47,32 +51,46 @@ func _update_animation(previous_velocity : Vector3) -> void:
 	elif previous_velocity != Vector3.ZERO and velocity == Vector3.ZERO:
 		$AnimatedSprite3D.play("idle")
 
+func _is_falling() -> bool:
+	if is_on_floor():
+		return false
+	return (Vector3.UP * basis * velocity).y < 0
+
+func _is_raising() -> bool:
+	if is_on_floor():
+		return false
+	return (Vector3.UP * basis * velocity).y > 0
+
 func _check_position() -> void:
 	var map : Map = get_parent()
-	get_tree().create_timer(POSITION_CHECK_PERIOD).timeout.connect(_check_position)
+	#get_tree().create_timer(POSITION_CHECK_PERIOD).timeout.connect(_check_position)
 	
 	var future_cell_position : Vector3i = map.local_to_map(position + map.cell_size * velocity.normalized())
 	
 	var future_mesh_id : int = map.get_cell_item(future_cell_position)
 	
+	
+	print(map.local_to_map(position), future_cell_position,map.find_ground(future_cell_position, basis.y))
 	# if not is on floor - look for floor
 	# if is on floor - look if view obstructed, keep on floor
 	const EMPTY_CELL_ID : int = map.INVALID_CELL_ITEM
 	
-	# might look for ceiling to hit when done like that...
-	if !is_on_floor() and future_mesh_id == EMPTY_CELL_ID:
+	# Handling falling
+	if _is_falling() and future_mesh_id == EMPTY_CELL_ID:
 		print_debug("Looking for ground to fall on")
-		var if_found_coordinates = map.find_ground(future_cell_position, basis.y)
-		if if_found_coordinates[0]:
-			move_to_cell(if_found_coordinates[1])
+		var found_coordinates = map.find_ground(future_cell_position, basis.y)
+		if found_coordinates != null:
+			move_to_cell(found_coordinates)
+	elif _is_raising() and future_mesh_id != EMPTY_CELL_ID:
+		print("Bonk!")
 	
 	if is_on_floor():
 		if !map.cell_in_view(future_cell_position):
 			$AnimatedSprite3D.modulate = Color("444444")
 		else:
 			$AnimatedSprite3D.modulate = Color.WHITE
-		if map.get_cell_item(future_cell_position + Vector3i(Vector3.DOWN * basis)):
-			print_debug("Will fall")
+		#if map.get_cell_item(future_cell_position + Vector3i(Vector3.DOWN * basis)):
+			#print_debug("Will fall")
 
 func move_to_cell(cell_position : Vector3i) -> void:
 	var map : Map = get_parent()
