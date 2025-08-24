@@ -36,4 +36,4 @@ func tween_y_rotation(angle_radians : float) -> void:
 	)
 
 func get_camera_normal() -> Vector3:
-	return Vector3.FORWARD * basis
+	return (Vector3.FORWARD * basis.inverse())

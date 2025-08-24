@@ -22,8 +22,8 @@ func _ready() -> void:
 		var player : Player = find_child("Player", false, false)
 		camera_origin.player = player
 		
-		camera_origin.connect("camera_rotation_started", player.stop_movement)
-		camera_origin.connect("camera_rotation_finished", player.update_rotation)
+		camera_origin.connect("camera_rotation_started", player.handle_camera_rotation_started)
+		camera_origin.connect("camera_rotation_finished", player.handle_camera_rotation_finished)
 
 func _instantiate_scripted_scenes() -> void:
 	var used_cells = get_used_cells()
@@ -67,28 +67,37 @@ func get_visible_cells_in_axis(cell_in_axis : Vector3i, axis : Vector3) -> AABB:
 	var used_AABB : AABB = get_used_AABB()
 	var axis_coordinates = (Vector3.ONE - abs(axis)) * Vector3(cell_in_axis)
 	
-	# Making sure the iteration always goes along FORWARD of camera, so that first seen cell is the end of view
-	var first_axis_cell : Vector3i = (used_AABB.end if axis == abs(axis) 
-		else used_AABB.position) * axis + axis_coordinates
-	var last_axis_cell : Vector3i = (used_AABB.position if axis == abs(axis) 
-		else used_AABB.end) * axis + axis_coordinates
+	var positive_axis : bool = axis == abs(axis) 
 	
-	for coordinate in abs(axis.dot(used_AABB.size)) + 1:
-		var cell_position : Vector3i = Vector3(first_axis_cell) - abs(axis) * coordinate
+	var iteration_size : int = abs(axis.dot(used_AABB.size))
+	
+	# Making sure the iteration always goes along FORWARD of camera, so that first seen cell is the end of view
+	var first_axis_cell : Vector3 = used_AABB.position * abs(axis) + axis_coordinates
+	var last_axis_cell : Vector3 = used_AABB.end * abs(axis) + axis_coordinates
+	if !positive_axis:
+		var tmp : Vector3 = first_axis_cell
+		first_axis_cell = last_axis_cell
+		last_axis_cell = tmp
+	
+	for coordinate in range(iteration_size + 1):
+		var cell_position : Vector3 = first_axis_cell + axis * coordinate
 		
-		# first_cell > cell_position > last_cell
 		if get_cell_item(cell_position) != INVALID_CELL_ITEM:
-			if axis == abs(axis):
-				return AABB(last_axis_cell, cell_position - last_axis_cell)
+			if positive_axis:
+				return AABB(first_axis_cell, cell_position - first_axis_cell)
 			else:
 				return AABB(cell_position, first_axis_cell - cell_position)
-	return AABB(last_axis_cell, first_axis_cell - last_axis_cell)
+	if positive_axis:
+		return AABB(first_axis_cell, last_axis_cell - first_axis_cell)
+	else:
+		return AABB(last_axis_cell, first_axis_cell - last_axis_cell)
 
 # The variant is either null of the found position
-func find_ground(player_position : Vector3i, player_down : Vector3i = Vector3i.DOWN) -> Variant:
+func find_ground(player_position : Vector3, player_down : Vector3i = Vector3i.DOWN) -> Variant:
 	var used_AABB : AABB = get_used_AABB()
 	var axis : Vector3 = camera_origin.get_camera_normal()
-	var axis_coordinates = (Vector3.ONE - abs(axis)) * Vector3(player_position)
+	var map_player_position = local_to_map(player_position)
+	var axis_coordinates = (Vector3.ONE - abs(axis)) * Vector3(map_player_position)
 	
 	# Making sure the iteration always goes along FORWARD of camera, so that first seen cell is the end of view
 	var first_axis_cell : Vector3i = (used_AABB.end if axis == abs(axis) 

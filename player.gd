@@ -8,15 +8,20 @@ const JUMP_STRENGTH = 5
 const POSITION_CHECK_PERIOD = 0.2
 
 var can_move : bool = true
+var map : Map
+@onready var sprite: AnimatedSprite3D = $AnimatedSprite3D
+
 
 func _ready() -> void:
 	if get_parent() is Map:
+		map = get_parent()
 		_check_position()
 
 func _process(delta: float) -> void:
 	var previous_velocity : Vector3 = velocity
 	_move(delta)
 	_update_animation(previous_velocity)
+	_update_visibility()
 
 func _move(delta: float) -> void:
 	if can_move:
@@ -41,15 +46,15 @@ func _input(event: InputEvent) -> void:
 # Making the player face the right direction - to be optimized
 func _update_facing_direction() -> void:
 	if (Vector3.RIGHT * basis * velocity).x < 0:
-		$AnimatedSprite3D.flip_h = true
+		sprite.flip_h = true
 	elif (Vector3.RIGHT * basis * velocity).x > 0:
-		$AnimatedSprite3D.flip_h = false
+		sprite.flip_h = false
 
 func _update_animation(previous_velocity : Vector3) -> void:
 	if previous_velocity == Vector3.ZERO and velocity != Vector3.ZERO:
-		$AnimatedSprite3D.play("walk")
+		sprite.play("walk")
 	elif previous_velocity != Vector3.ZERO and velocity == Vector3.ZERO:
-		$AnimatedSprite3D.play("idle")
+		sprite.play("idle")
 
 func _is_falling() -> bool:
 	if is_on_floor():
@@ -61,8 +66,14 @@ func _is_raising() -> bool:
 		return false
 	return (Vector3.UP * basis * velocity).y > 0
 
+func _update_visibility() -> void:
+	if !map.cell_in_view(map.local_to_map(position)):
+		sprite.modulate = Color("444444")
+	else:
+		sprite.modulate = Color.WHITE
+	
+
 func _check_position() -> void:
-	var map : Map = get_parent()
 	#get_tree().create_timer(POSITION_CHECK_PERIOD).timeout.connect(_check_position)
 	
 	var future_cell_position : Vector3i = map.local_to_map(position + map.cell_size * velocity.normalized())
@@ -78,29 +89,38 @@ func _check_position() -> void:
 	# Handling falling
 	if _is_falling() and future_mesh_id == EMPTY_CELL_ID:
 		print_debug("Looking for ground to fall on")
-		var found_coordinates = map.find_ground(future_cell_position, basis.y)
+		var found_coordinates = map.find_ground(position + $CollisionShape3D.get_point_position(PointCollision.Position.LOWEST), basis.y)
 		if found_coordinates != null:
 			move_to_cell(found_coordinates)
 	elif _is_raising() and future_mesh_id != EMPTY_CELL_ID:
 		print("Bonk!")
 	
-	if is_on_floor():
-		if !map.cell_in_view(future_cell_position):
-			$AnimatedSprite3D.modulate = Color("444444")
-		else:
-			$AnimatedSprite3D.modulate = Color.WHITE
+	#if is_on_floor():
 		#if map.get_cell_item(future_cell_position + Vector3i(Vector3.DOWN * basis)):
 			#print_debug("Will fall")
 
-func move_to_cell(cell_position : Vector3i) -> void:
-	var map : Map = get_parent()
-	var in_cell_offset : Vector3 = position - map.map_to_local(map.local_to_map(position))
-	position = map.map_to_local(cell_position) + in_cell_offset
+func align_in_cell(axis : Vector3) -> void:
+	var cell_position = map.local_to_map(position)
+	var in_cell_offset : Vector3 = position - map.map_to_local(cell_position)
+	var fixed_cell_offset : Vector3 = in_cell_offset * (Vector3.ONE - abs(axis))
+	position = map.map_to_local(cell_position) + fixed_cell_offset
 
-func stop_movement() -> void:
+func move_to_cell(destination : Vector3i) -> void:
+	align_in_cell(Vector3.FORWARD * basis)
+	var cell_position = map.local_to_map(position)
+	var in_cell_offset : Vector3 = position - map.map_to_local(cell_position)
+	position = map.map_to_local(destination) + in_cell_offset
+
+func handle_camera_rotation_started() -> void:
 	velocity = Vector3.ZERO
 	can_move = false
+	
+	sprite.pause()
 
-func update_rotation(new_basis : Basis) -> void:
+func handle_camera_rotation_finished(new_basis : Basis) -> void:
 	basis = new_basis
 	can_move = true
+	
+	sprite.play()
+	
+	align_in_cell(Vector3.FORWARD * basis)
