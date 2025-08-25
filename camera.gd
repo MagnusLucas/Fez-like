@@ -17,6 +17,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("rotate_right") and can_rotate:
 		tween_y_rotation(-PI/2)
 	
+	CameraBasisLabel.text = str(basis)
 	
 	if Input.is_action_just_pressed("rotate_up") and can_rotate:
 		print_debug("TODO: rotating the camera up")

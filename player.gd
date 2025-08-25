@@ -74,24 +74,31 @@ func _update_visibility() -> void:
 	
 
 func _check_position() -> void:
-	#get_tree().create_timer(POSITION_CHECK_PERIOD).timeout.connect(_check_position)
+	get_tree().create_timer(POSITION_CHECK_PERIOD).timeout.connect(_check_position)
 	
-	var future_cell_position : Vector3i = map.local_to_map(position + map.cell_size * velocity.normalized())
+	var position_offset : Vector3 = $CollisionShape3D.get_point_position(PointCollision.Position.LOWEST) * basis
 	
+	# This might be problematic - can go diagonally and not check vertical collisions
+	
+	# Update: This actually is the problem xD
+	var future_cell_position : Vector3i = map.local_to_map(position + position_offset + 
+			map.cell_size * velocity.normalized())
 	var future_mesh_id : int = map.get_cell_item(future_cell_position)
 	
 	
-	print(map.local_to_map(position), future_cell_position,map.find_ground(future_cell_position, basis.y))
 	# if not is on floor - look for floor
 	# if is on floor - look if view obstructed, keep on floor
 	const EMPTY_CELL_ID : int = map.INVALID_CELL_ITEM
 	
 	# Handling falling
 	if _is_falling() and future_mesh_id == EMPTY_CELL_ID:
-		print_debug("Looking for ground to fall on")
-		var found_coordinates = map.find_ground(position + $CollisionShape3D.get_point_position(PointCollision.Position.LOWEST), basis.y)
+		print("Looking for ground to fall on")
+		var found_coordinates = map.find_ground(map.local_to_map(
+				position + position_offset))
 		if found_coordinates != null:
+			print(map.local_to_map(position + position_offset), future_cell_position )
 			move_to_cell(found_coordinates)
+	
 	elif _is_raising() and future_mesh_id != EMPTY_CELL_ID:
 		print("Bonk!")
 	
@@ -106,7 +113,7 @@ func align_in_cell(axis : Vector3) -> void:
 	position = map.map_to_local(cell_position) + fixed_cell_offset
 
 func move_to_cell(destination : Vector3i) -> void:
-	align_in_cell(Vector3.FORWARD * basis)
+	print("Move to: ", destination)
 	var cell_position = map.local_to_map(position)
 	var in_cell_offset : Vector3 = position - map.map_to_local(cell_position)
 	position = map.map_to_local(destination) + in_cell_offset

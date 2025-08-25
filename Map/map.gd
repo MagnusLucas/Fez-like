@@ -150,27 +150,17 @@ func get_visible_cells_in_axis(cell_in_axis : Vector3i, axis : Vector3) -> AABB:
 	else:
 		return AABB(cell_position, first_cell - cell_position)
 
-# The variant is either null of the found position
-func find_ground(player_position : Vector3, player_down : Vector3i = Vector3i.DOWN) -> Variant:
-	var used_AABB : AABB = get_used_AABB()
+# The variant is either null or the found position
+func find_ground(player_position : Vector3i) -> Variant:
 	var axis : Vector3 = camera_origin.get_camera_normal()
-	var map_player_position = local_to_map(player_position)
-	var axis_coordinates = (Vector3.ONE - abs(axis)) * Vector3(map_player_position)
+	var limits = get_iteration_limits(player_position, axis)
 	
-	# Making sure the iteration always goes along FORWARD of camera, so that first seen cell is the end of view
-	var first_axis_cell : Vector3i = (used_AABB.end if axis == abs(axis) 
-		else used_AABB.position) * axis + axis_coordinates
-	var _last_axis_cell : Vector3i = (used_AABB.position if axis == abs(axis) 
-		else used_AABB.end) * axis + axis_coordinates
+	var first_axis_cell : Vector3i = limits["first_cell"]
+	var last_axis_cell : Vector3i = limits["last_cell"]
 	
-	for coordinate in abs(axis.dot(used_AABB.size)) + 1:
-		var cell_position : Vector3i = Vector3(first_axis_cell) - abs(axis) * coordinate
-		
-		# first_cell > cell_position > last_cell
-		if (get_cell_item(cell_position) != INVALID_CELL_ITEM and 
-			get_cell_item(cell_position + player_down) == INVALID_CELL_ITEM):
-			return cell_position
-	return null
+	var conditions : Dictionary = {"SELF" : [""], "DOWN" : ["Wall"]}
+	
+	return find_cell_in_axis(first_axis_cell, last_axis_cell, conditions)
 
 func cell_in_view(cell_position : Vector3i) -> bool:
 	var camera_normal : Vector3i = camera_origin.get_camera_normal()

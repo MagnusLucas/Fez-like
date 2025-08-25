@@ -15,6 +15,10 @@ run/main_scene="uid://3iay6ji5nbek"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+CameraBasisLabel="*res://Map/camera_basis_label.tscn"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/gridmap_coordinate_shower/plugin.cfg")
