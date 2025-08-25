@@ -59,17 +59,65 @@ func get_used_AABB() -> AABB:
 			max_z = cell.z
 	return AABB(Vector3i(min_x, min_y, min_z), Vector3i(max_x - min_x, max_y - min_y, max_z - min_z))
 
-# One could check all cells on map for whether they are on the axis
-# Or all coordinates on axis for whether they have a cell
+func str_to_vec(string : String, global : bool = false) -> Vector3i:
+	var result = Vector3i.ZERO
+	if string.contains("LEFT"):
+		result += Vector3i.LEFT
+	elif string.contains("RIGHT"):
+		result += Vector3i.RIGHT
+	if string.contains("DOWN"):
+		result += Vector3i.DOWN
+	elif string.contains("UP"):
+		result += Vector3i.UP
+	if string.contains("BACK"):
+		result += Vector3i.BACK
+	elif string.contains("FORWARD"):
+		result += Vector3i.FORWARD
+	if global:
+		return result
+	else:
+		var camera_basis : Basis = camera_origin.basis
+		result = Vector3(result) * camera_basis.inverse()
+		return result
 
-# The second one should be quicker
-func get_visible_cells_in_axis(cell_in_axis : Vector3i, axis : Vector3) -> AABB:
+func cell_conditions_fulfilled(cell_position : Vector3i, 
+		searched_type_names : Array, exclusive : bool = false) -> bool:
+	
+	var cell_id : int = get_cell_item(cell_position)
+	if cell_id == INVALID_CELL_ITEM:
+		if searched_type_names.has("") and not exclusive:
+			return true
+		else:
+			return false
+	
+	var cell_name = mesh_library.get_item_name(cell_id)
+	return searched_type_names.has(cell_name) and not exclusive
+
+func neighbourhood_conditions_fulfilled(cell_position : Vector3i, 
+		conditions : Dictionary) -> bool:
+	for condition in conditions:
+		if !cell_conditions_fulfilled(cell_position + str_to_vec(condition),
+				conditions[condition]):
+			return false
+	return true
+
+func find_cell_in_axis(first_cell : Vector3, last_cell : Vector3, 
+		conditions : Dictionary) -> Variant:
+	
+	var iteration_size := int((last_cell - first_cell).length())
+	var axis : Vector3 = (last_cell - first_cell)/iteration_size
+	
+	for coordinate in range(iteration_size + 1):
+		var cell_position : Vector3 = first_cell + axis * coordinate
+		
+		if neighbourhood_conditions_fulfilled(cell_position, conditions):
+			return cell_position
+	return null
+
+func get_iteration_limits(cell_in_axis : Vector3i, axis : Vector3) -> Dictionary:
 	var used_AABB : AABB = get_used_AABB()
 	var axis_coordinates = (Vector3.ONE - abs(axis)) * Vector3(cell_in_axis)
-	
 	var positive_axis : bool = axis == abs(axis) 
-	
-	var iteration_size : int = abs(axis.dot(used_AABB.size))
 	
 	# Making sure the iteration always goes along FORWARD of camera, so that first seen cell is the end of view
 	var first_axis_cell : Vector3 = used_AABB.position * abs(axis) + axis_coordinates
@@ -79,18 +127,28 @@ func get_visible_cells_in_axis(cell_in_axis : Vector3i, axis : Vector3) -> AABB:
 		first_axis_cell = last_axis_cell
 		last_axis_cell = tmp
 	
-	for coordinate in range(iteration_size + 1):
-		var cell_position : Vector3 = first_axis_cell + axis * coordinate
-		
-		if get_cell_item(cell_position) != INVALID_CELL_ITEM:
-			if positive_axis:
-				return AABB(first_axis_cell, cell_position - first_axis_cell)
-			else:
-				return AABB(cell_position, first_axis_cell - cell_position)
+	return {"first_cell" : first_axis_cell, "last_cell" : last_axis_cell}
+
+# One could check all cells on map for whether they are on the axis
+# Or all coordinates on axis for whether they have a cell
+# The second one should be quicker
+func get_visible_cells_in_axis(cell_in_axis : Vector3i, axis : Vector3) -> AABB:
+	var positive_axis : bool = axis == abs(axis)
+	
+	var limits = get_iteration_limits(cell_in_axis, axis)
+	var first_cell = limits["first_cell"]
+	var last_cell = limits["last_cell"]
+	
+	var conditions : Dictionary = {"SELF" : ["Wall"]}
+	
+	var cell_position : Variant = find_cell_in_axis(first_cell, last_cell, conditions)
+	
+	if cell_position == null:
+		cell_position = last_cell
 	if positive_axis:
-		return AABB(first_axis_cell, last_axis_cell - first_axis_cell)
+		return AABB(first_cell, cell_position - first_cell)
 	else:
-		return AABB(last_axis_cell, first_axis_cell - last_axis_cell)
+		return AABB(cell_position, first_cell - cell_position)
 
 # The variant is either null of the found position
 func find_ground(player_position : Vector3, player_down : Vector3i = Vector3i.DOWN) -> Variant:
