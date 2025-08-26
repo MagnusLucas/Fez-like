@@ -114,7 +114,11 @@ func find_cell_in_axis(first_cell : Vector3, last_cell : Vector3,
 			return cell_position
 	return null
 
-func get_iteration_limits(cell_in_axis : Vector3i, axis : Vector3) -> Dictionary:
+func find_cell(cell_in_axis : Vector3i, conditions : Dictionary) -> Variant:
+	var limits = get_iteration_limits(cell_in_axis)
+	return find_cell_in_axis(limits["first_cell"], limits["last_cell"], conditions)
+
+func get_iteration_limits(cell_in_axis : Vector3i, axis : Vector3 = camera_origin.get_camera_normal()) -> Dictionary:
 	var used_AABB : AABB = get_used_AABB()
 	var axis_coordinates = (Vector3.ONE - abs(axis)) * Vector3(cell_in_axis)
 	var positive_axis : bool = axis == abs(axis) 
