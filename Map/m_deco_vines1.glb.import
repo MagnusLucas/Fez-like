@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cxslvadebj07l"
-path="res://.godot/imported/m_sand_brick_w_grass.glb-7b528a20468ec949ada9c8a12166a34d.scn"
+uid="uid://bf8cfau3gdcoi"
+path="res://.godot/imported/m_deco_vines1.glb-f2dfdaf7baf239ce435065c438eb87bd.scn"
 
 [deps]
 
-source_file="res://Map/m_sand_brick_w_grass.glb"
-dest_files=["res://.godot/imported/m_sand_brick_w_grass.glb-7b528a20468ec949ada9c8a12166a34d.scn"]
+source_file="res://Map/m_deco_vines1.glb"
+dest_files=["res://.godot/imported/m_deco_vines1.glb-f2dfdaf7baf239ce435065c438eb87bd.scn"]
 
 [params]
 

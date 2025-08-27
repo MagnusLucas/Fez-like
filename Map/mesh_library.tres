@@ -1,6 +1,6 @@
 [gd_resource type="MeshLibrary" load_steps=19 format=4 uid="uid://dkjwbfrjn1hdo"]
 
-[ext_resource type="Texture2D" uid="uid://dr32hidhbc5pd" path="res://Map/m_sand_brick_w_grass_tile_texture.png" id="1_vc2d0"]
+[ext_resource type="Texture2D" uid="uid://dr32hidhbc5pd" path="res://Map/tex_block_sand_brick_w_grass.png" id="1_vc2d0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_elc85"]
 resource_name = "m_cube_sandy_brick"

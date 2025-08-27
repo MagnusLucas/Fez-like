@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cia3tnaycm0q1"
-path.s3tc="res://.godot/imported/m_sand_brick_w_grass_sandy_brick_with_grass_tile_texture.png-f464b77cdb59bce980b16c35c8efea78.s3tc.ctex"
+uid="uid://c1i2sppiu5bba"
+path.s3tc="res://.godot/imported/tex_block_sand_w_grass_v2.png-e1430751ea889f9279207a82a7630d22.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "99b4c5d8726448e1aef98d04c6cfef8d"
+"md5": "6151046edaf18d56c8d0d1a032a95fa8"
 }
 
 [deps]
 
-source_file="res://Map/m_sand_brick_w_grass_sandy_brick_with_grass_tile_texture.png"
-dest_files=["res://.godot/imported/m_sand_brick_w_grass_sandy_brick_with_grass_tile_texture.png-f464b77cdb59bce980b16c35c8efea78.s3tc.ctex"]
+source_file="res://Map/tex_block_sand_w_grass_v2.png"
+dest_files=["res://.godot/imported/tex_block_sand_w_grass_v2.png-e1430751ea889f9279207a82a7630d22.s3tc.ctex"]
 
 [params]
 
