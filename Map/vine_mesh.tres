@@ -1,23 +1,20 @@
 [gd_resource type="ArrayMesh" load_steps=6 format=4 uid="uid://c2je2dam6g2x2"]
 
-[ext_resource type="Texture2D" uid="uid://dhkvxgsjqpbtx" path="res://Map/m_deco_vines1_vine1.png" id="1_vs2b0"]
+[ext_resource type="Texture2D" uid="uid://cemcwqyvy8auj" path="res://Map/tex_deco_vines1.png" id="1_oebt4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a2afj"]
 resource_name = "m_vine1.002"
-albedo_texture = ExtResource("1_vs2b0")
-emission_texture = ExtResource("1_vs2b0")
+albedo_texture = ExtResource("1_oebt4")
 texture_filter = 0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t8cfl"]
 resource_name = "m_vine1"
-albedo_texture = ExtResource("1_vs2b0")
-emission_texture = ExtResource("1_vs2b0")
+albedo_texture = ExtResource("1_oebt4")
 texture_filter = 0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_00pui"]
 resource_name = "m_vine1.003"
-albedo_texture = ExtResource("1_vs2b0")
-emission_texture = ExtResource("1_vs2b0")
+albedo_texture = ExtResource("1_oebt4")
 texture_filter = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_f40i0"]
