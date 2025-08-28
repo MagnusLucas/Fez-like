@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://8g251bbap0xl"]
+[gd_scene load_steps=25 format=4 uid="uid://8g251bbap0xl"]
 
 [ext_resource type="ArrayMesh" uid="uid://dpnq3a6xl2n04" path="res://Map/sandy_mesh.tres" id="2_4ivkw"]
 [ext_resource type="PackedScene" uid="uid://b23xakt7tus2t" path="res://Map/base_cell_collider.tscn" id="2_q8x2v"]
@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://0ggihxysicho" path="res://Map/tex_block_sand_brick_v2.png" id="3_q8x2v"]
 [ext_resource type="Texture2D" uid="uid://dsjelvy0rdras" path="res://Map/tex_block_sand_w_grass_v1.png" id="5_bgj6p"]
 [ext_resource type="Texture2D" uid="uid://c1i2sppiu5bba" path="res://Map/tex_block_sand_w_grass_v2.png" id="6_11i3v"]
-[ext_resource type="PackedScene" uid="uid://bf8cfau3gdcoi" path="res://Map/m_deco_vines1.glb" id="7_bgj6p"]
+[ext_resource type="ArrayMesh" uid="uid://c2je2dam6g2x2" path="res://Map/vine_mesh.tres" id="7_bgj6p"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jo043"]
 albedo_color = Color(0, 0, 0, 1)
@@ -133,35 +133,6 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_11i3v"]
-load_path = "res://.godot/imported/tex_block_sand_w_grass_v2.png-e1430751ea889f9279207a82a7630d22.s3tc.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_nhv45"]
-load_path = "res://.godot/imported/m_sand_brick_w_grass_tile_texture.png-5225f37d1883733646e5998141ea25f3.ctex"
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fjjcu"]
-resource_name = "m_cube_sandy_brick"
-albedo_texture = SubResource("CompressedTexture2D_11i3v")
-emission_texture = SubResource("CompressedTexture2D_nhv45")
-texture_filter = 0
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_idb18"]
-resource_name = "m_sandy_brick_with_grass_Cube_001"
-_surfaces = [{
-"aabb": AABB(-0.5, -0.5, -0.5, 1, 1, 1),
-"attribute_data": PackedByteArray("//9lZgAAMjP//zIzAABlZv//mZkAAGVm//9lZgAAmZn//2VmAAAyM///MjMAAGVm//8yMwAAAAD//wAAAAAyMwAAmZn//8zMAADMzP//mZn//8zMAAD//wAAzMz/////"),
-"format": 34896613399,
-"index_count": 36,
-"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
-"material": SubResource("StandardMaterial3D_fjjcu"),
-"name": "m_cube_sandy_brick",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 24,
-"vertex_data": PackedByteArray("AAAAAP///78AAP//AAD/vwAA//////+/AAAAAAAA/78AAAAAAAD///////8AAP//AAD//wAA/////wAAAAD/////AAAAAP+//////////7//////AAD/v///AAD///+///8AAP//AIAAAP////8AgP///////wCAAAAAAP//AIAAAAAAAABU1f//AAD//1TV//8AAAAAVNUAAAAA//9U1f////8AAP+/AAD//////78AAP//AAD/v/////////+//3////9/////f////3////9/////f////3////9/////fwAA/38AAP9/AAD/fwAA/3////9/////f////3///6oqVNWqKlTVqipU1aoqVNX///9/////f////3////9/")
-}]
-blend_shape_mode = 0
-
 [node name="MeshLibrary" type="Node3D"]
 
 [node name="Wall" type="MeshInstance3D" parent="."]
@@ -187,38 +158,27 @@ mesh = SubResource("SphereMesh_g2w8g")
 [node name="Wall2" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("ArrayMesh_8nmro")
-skeleton = NodePath("../Wall")
 
 [node name="BaseCellCollider" parent="Wall2" instance=ExtResource("2_q8x2v")]
 
 [node name="Wall3" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("ArrayMesh_fjjcu")
-skeleton = NodePath("../Wall")
 
 [node name="BaseCellCollider" parent="Wall3" instance=ExtResource("2_q8x2v")]
 
 [node name="Wall4" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("ArrayMesh_mics0")
-skeleton = NodePath("../Wall")
 
 [node name="BaseCellCollider" parent="Wall4" instance=ExtResource("2_q8x2v")]
 
 [node name="Wall5" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("ArrayMesh_n2v57")
-skeleton = NodePath("../Wall")
 
 [node name="BaseCellCollider" parent="Wall5" instance=ExtResource("2_q8x2v")]
 
 [node name="Vines1" type="MeshInstance3D" parent="."]
-visible = false
-mesh = SubResource("ArrayMesh_idb18")
+mesh = ExtResource("7_bgj6p")
 skeleton = NodePath("../Wall")
-
-[node name="BaseCellCollider" parent="Vines1" instance=ExtResource("2_q8x2v")]
-
-[node name="m_deco_vines1" parent="." instance=ExtResource("7_bgj6p")]
-
-[editable path="m_deco_vines1"]
