@@ -169,10 +169,11 @@ func handle_camera_rotation_started() -> void:
 	velocity = Vector3.ZERO
 	can_move = false
 	
+	sprite.play("idle")
 	sprite.pause()
 
 func handle_camera_rotation_finished(new_basis : Basis) -> void:
-	basis = new_basis
+	basis = new_basis * scale.x
 	can_move = true
 	
 	sprite.play()

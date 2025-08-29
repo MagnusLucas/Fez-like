@@ -3,10 +3,9 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cemcwqyvy8auj"
-path.s3tc="res://.godot/imported/tex_deco_vines1.png-2f5daa39cd1771e4eb0d144d730a0df4.s3tc.ctex"
+path="res://.godot/imported/tex_deco_vines1.png-2f5daa39cd1771e4eb0d144d730a0df4.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 generator_parameters={
 "md5": "a5294f0b8c8e032afb08601b23571918"
@@ -15,11 +14,11 @@ generator_parameters={
 [deps]
 
 source_file="res://Map/tex_deco_vines1.png"
-dest_files=["res://.godot/imported/tex_deco_vines1.png-2f5daa39cd1771e4eb0d144d730a0df4.s3tc.ctex"]
+dest_files=["res://.godot/imported/tex_deco_vines1.png-2f5daa39cd1771e4eb0d144d730a0df4.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
