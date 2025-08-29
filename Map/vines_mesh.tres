@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cemcwqyvy8auj" path="res://Map/tex_deco_vines1.png" id="1_4ls3j"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6ekp7"]
+load_path = "res://.godot/imported/m_deco_vines1_vine1.png-caf066c35f3691ecb040449fda677aa2.s3tc.ctex"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4ls3j"]
 resource_name = "m_vine1.002"
