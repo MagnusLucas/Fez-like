@@ -34,9 +34,9 @@ func _move(delta: float) -> void:
 	move_and_slide()
 
 func _handle_input() -> void:
-	if Input.is_action_just_pressed("go_left"):
+	if Input.is_action_just_pressed("left"):
 		velocity -= basis.x * SPEED
-	if Input.is_action_just_pressed("go_right"):
+	if Input.is_action_just_pressed("right"):
 		velocity += basis.x * SPEED
 	if Input.is_action_just_pressed("jump"):
 		velocity += basis.y * JUMP_STRENGTH
