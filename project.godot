@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 CameraBasisLabel="*res://Map/camera_basis_label.tscn"
+Globals="*res://Globals.gd"
 
 [editor_plugins]
 

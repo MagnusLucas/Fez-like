@@ -143,7 +143,7 @@ func get_visible_cells_in_axis(cell_in_axis : Vector3i, axis : Vector3) -> AABB:
 	var first_cell = limits["first_cell"]
 	var last_cell = limits["last_cell"]
 	
-	var conditions : Dictionary = {"SELF" : ["Wall"]}
+	var conditions : Dictionary = {"SELF" : Globals.VIEW_OBSTRUCTING_CELLS}
 	
 	var cell_position : Variant = find_cell_in_axis(first_cell, last_cell, conditions)
 	
