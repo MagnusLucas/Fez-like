@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://sbliytswwjwo" path="res://camera.gd" id="3_g2v4t"]
 
 [node name="Map" type="GridMap"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, -0.52205)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, -0.5)
 mesh_library = ExtResource("1_p7rxw")
 cell_size = Vector3(1, 1, 1)
 data = {

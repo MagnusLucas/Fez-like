@@ -34,9 +34,9 @@ func _move(delta: float) -> void:
 	move_and_slide()
 
 func _handle_input() -> void:
-	if Input.is_action_just_pressed("go_left"):
+	if Input.is_action_just_pressed("left"):
 		velocity -= basis.x * SPEED
-	if Input.is_action_just_pressed("go_right"):
+	if Input.is_action_just_pressed("right"):
 		velocity += basis.x * SPEED
 	if Input.is_action_just_pressed("jump"):
 		velocity += basis.y * JUMP_STRENGTH
@@ -169,6 +169,7 @@ func handle_camera_rotation_started() -> void:
 	velocity = Vector3.ZERO
 	can_move = false
 	
+	sprite.play("idle")
 	sprite.pause()
 
 func handle_camera_rotation_finished(new_basis : Basis) -> void:

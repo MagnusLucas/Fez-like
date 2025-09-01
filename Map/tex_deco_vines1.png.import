@@ -19,7 +19,7 @@ dest_files=["res://.godot/imported/tex_deco_vines1.png-2f5daa39cd1771e4eb0d144d7
 [params]
 
 compress/mode=0
-compress/high_quality=true
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0

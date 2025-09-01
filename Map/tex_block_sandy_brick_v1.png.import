@@ -3,20 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bmcikre2djx1s"
-path.s3tc="res://.godot/imported/tex_block_sandy_brick_v1.png-8cbb009400ac1634354bae1f3365403b.s3tc.ctex"
+path="res://.godot/imported/tex_block_sandy_brick_v1.png-8cbb009400ac1634354bae1f3365403b.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Map/tex_block_sandy_brick_v1.png"
-dest_files=["res://.godot/imported/tex_block_sandy_brick_v1.png-8cbb009400ac1634354bae1f3365403b.s3tc.ctex"]
+dest_files=["res://.godot/imported/tex_block_sandy_brick_v1.png-8cbb009400ac1634354bae1f3365403b.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

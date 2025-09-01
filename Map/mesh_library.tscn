@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://0ggihxysicho" path="res://Map/tex_block_sand_brick_v2.png" id="3_q8x2v"]
 [ext_resource type="Texture2D" uid="uid://dsjelvy0rdras" path="res://Map/tex_block_sand_w_grass_v1.png" id="5_bgj6p"]
 [ext_resource type="Texture2D" uid="uid://c1i2sppiu5bba" path="res://Map/tex_block_sand_w_grass_v2.png" id="6_11i3v"]
-[ext_resource type="ArrayMesh" uid="uid://c2je2dam6g2x2" path="res://Map/vine_mesh.tres" id="7_bgj6p"]
+[ext_resource type="ArrayMesh" uid="uid://d1ahu6p7uffu0" path="res://Map/vines_mesh.tres" id="7_bgj6p"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jo043"]
 albedo_color = Color(0, 0, 0, 1)

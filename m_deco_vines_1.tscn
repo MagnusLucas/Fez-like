@@ -1,5 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://8sbuosfku2r5"]
-
-[ext_resource type="PackedScene" uid="uid://bf8cfau3gdcoi" path="res://Map/m_deco_vines1.glb" id="1_003p8"]
-
-[node name="m_deco_vines1" instance=ExtResource("1_003p8")]
