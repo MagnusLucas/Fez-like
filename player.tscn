@@ -86,16 +86,15 @@ animations = [{
 }]
 
 [node name="Player" type="CharacterBody3D"]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 script = ExtResource("1_4flbx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00719225, -0.0894878, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.014, -0.178, 0)
 shape = SubResource("CylinderShape3D_i3pqv")
 script = ExtResource("2_hqtel")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 billboard = 1
 no_depth_test = true
 texture_filter = 0

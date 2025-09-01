@@ -173,7 +173,7 @@ func handle_camera_rotation_started() -> void:
 	sprite.pause()
 
 func handle_camera_rotation_finished(new_basis : Basis) -> void:
-	basis = new_basis * scale.x
+	basis = new_basis
 	can_move = true
 	
 	sprite.play()
