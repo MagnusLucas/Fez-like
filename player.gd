@@ -2,7 +2,7 @@ extends CharacterBody3D
 class_name Player
 
 const GRAVITY = 10
-const SPEED = 2
+const SPEED = 4
 const JUMP_STRENGTH = 5
 
 const POSITION_CHECK_PERIOD = 0.2
@@ -27,18 +27,21 @@ func _process(delta: float) -> void:
 
 func _move(delta: float) -> void:
 	if can_move:
+		_handle_input()
 		if !is_on_floor():
 			velocity -= basis.y * GRAVITY * delta
-		_handle_input()
 	_update_facing_direction()
 	move_and_slide()
 
 func _handle_input() -> void:
-	if Input.is_action_just_pressed("left"):
-		velocity -= basis.x * SPEED
-	if Input.is_action_just_pressed("right"):
-		velocity += basis.x * SPEED
-	if Input.is_action_just_pressed("jump"):
+	var local_velocity : Vector3 = velocity * basis
+	local_velocity.x = 0
+	if Input.is_action_pressed("left"):
+		local_velocity.x -= SPEED
+	if Input.is_action_pressed("right"):
+		local_velocity.x += SPEED
+	velocity = local_velocity * basis.inverse()
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity += basis.y * JUMP_STRENGTH
 
 func _input(event: InputEvent) -> void:
