@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://3iay6ji5nbek"]
+
+[ext_resource type="PackedScene" uid="uid://bynqkp5rcr2mr" path="res://ScriptsAndScenes/lighting.tscn" id="1_1unmu"]
+[ext_resource type="PackedScene" uid="uid://clpoi7ggf0pur" path="res://ScriptsAndScenes/map.tscn" id="2_imgg4"]
+
+[node name="Game" type="Node3D"]
+
+[node name="Lighting" parent="." instance=ExtResource("1_1unmu")]
+
+[node name="Map" parent="." instance=ExtResource("2_imgg4")]
