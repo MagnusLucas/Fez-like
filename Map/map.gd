@@ -93,6 +93,10 @@ func cell_conditions_fulfilled(cell_position : Vector3i,
 	var cell_name = mesh_library.get_item_name(cell_id)
 	return searched_type_names.has(cell_name) and not exclusive
 
+func is_cell_walkable(cell_position : Vector3i) -> bool:
+	var conditions : Dictionary = {"SELF" : [""], "DOWN" : Globals.GROUND_CELLS}
+	return neighbourhood_conditions_fulfilled(cell_position, conditions)
+
 func neighbourhood_conditions_fulfilled(cell_position : Vector3i, 
 		conditions : Dictionary) -> bool:
 	for condition in conditions:
@@ -162,9 +166,12 @@ func find_ground(player_position : Vector3i) -> Variant:
 	var first_axis_cell : Vector3i = limits["first_cell"]
 	var last_axis_cell : Vector3i = limits["last_cell"]
 	
-	var conditions : Dictionary = {"SELF" : [""], "DOWN" : ["Wall"]}
+	var conditions : Dictionary = {"SELF" : [""], "DOWN" : Globals.GROUND_CELLS}
 	
 	return find_cell_in_axis(first_axis_cell, last_axis_cell, conditions)
+
+func empty_at_position(cell_position : Vector3i) -> bool:
+	return get_cell_item(cell_position) == INVALID_CELL_ITEM
 
 func cell_in_view(cell_position : Vector3i) -> bool:
 	var camera_normal : Vector3i = camera_origin.get_camera_normal()

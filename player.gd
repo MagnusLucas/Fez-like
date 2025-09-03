@@ -17,7 +17,7 @@ var map : Map
 func _ready() -> void:
 	if get_parent() is Map:
 		map = get_parent()
-		_check_position()
+		#_check_position()
 
 func _process(delta: float) -> void:
 	var previous_velocity : Vector3 = velocity
@@ -40,6 +40,8 @@ func _handle_input() -> void:
 		local_velocity.x -= SPEED
 	if Input.is_action_pressed("right"):
 		local_velocity.x += SPEED
+	if !is_zero_approx(local_velocity.x):
+		_check_position()
 	velocity = local_velocity * basis.inverse()
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity += basis.y * JUMP_STRENGTH
@@ -124,35 +126,35 @@ func _check_horizontal_position() -> void:
 	
 	if _is_moving_left():
 		character_side = collision.get_point_position(
-				PointCollision.Position.LEFT_SIDE_MOST) * basis + position
+				PointCollision.Position.LEFT_SIDE_MOST) * basis.inverse() + position
 		future_cell_position = map.local_to_map(character_side + 
-				map.cell_size * Vector3.LEFT * basis)
+				map.cell_size * Vector3.LEFT * basis.inverse())
 		moving_left = true
 	elif _is_moving_right():
 		character_side = collision.get_point_position(
-				PointCollision.Position.RIGHT_SIDE_MOST) * basis + position
+				PointCollision.Position.RIGHT_SIDE_MOST) * basis.inverse() + position
 		future_cell_position = map.local_to_map(character_side + 
-				map.cell_size * Vector3.RIGHT * basis)
+				map.cell_size * Vector3.RIGHT * basis.inverse())
 		moving_left = false
 	else:
 		return
 	
-	if map.get_cell_item(future_cell_position) != map.INVALID_CELL_ITEM:
+	if not map.empty_at_position(future_cell_position):
 		var conditions : Dictionary
 		
+		# Looking for ground
 		if moving_left:
-			conditions = {"SELF" : [""], "LEFT" : [""], "LEFTDOWN" : ["Wall"]}
+			conditions = {"SELF" : [""], "LEFT" : [""], "LEFTDOWN" : Globals.GROUND_CELLS}
 		else:
-			conditions = {"SELF" : [""], "RIGHT" : [""], "RIGHTDOWN" : ["Wall"]}
+			conditions = {"SELF" : [""], "RIGHT" : [""], "RIGHTDOWN" : Globals.GROUND_CELLS}
 		
 		var cell_position : Vector3i = map.local_to_map(character_side)
 		var found_cell : Variant = map.find_cell(cell_position, conditions)
-		
 		if found_cell != null:
 			move_to_cell(found_cell)
 
 func _check_position() -> void:
-	get_tree().create_timer(POSITION_CHECK_PERIOD).timeout.connect(_check_position)
+	#get_tree().create_timer(POSITION_CHECK_PERIOD).timeout.connect(_check_position)
 	
 	_check_vertical_position()
 	_check_horizontal_position()
@@ -164,6 +166,7 @@ func align_in_cell(axis : Vector3) -> void:
 	position = map.map_to_local(cell_position) + fixed_cell_offset
 
 func move_to_cell(destination : Vector3i) -> void:
+	print("TP!")
 	var cell_position = map.local_to_map(position)
 	var in_cell_offset : Vector3 = position - map.map_to_local(cell_position)
 	position = map.map_to_local(destination) + in_cell_offset
