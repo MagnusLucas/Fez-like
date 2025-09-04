@@ -30,6 +30,7 @@ func _move(delta: float) -> void:
 		_handle_input()
 		if !is_on_floor():
 			velocity -= basis.y * GRAVITY * delta
+		teleporter.check_position(delta)
 	_update_facing_direction()
 	move_and_slide()
 
@@ -40,8 +41,6 @@ func _handle_input() -> void:
 		local_velocity.x -= SPEED
 	if Input.is_action_pressed("right"):
 		local_velocity.x += SPEED
-	if !is_zero_approx(local_velocity.x):
-		teleporter.check_position()
 	velocity = local_velocity * basis.inverse()
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity += basis.y * JUMP_STRENGTH

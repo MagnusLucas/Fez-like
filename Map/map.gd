@@ -159,7 +159,7 @@ func get_visible_cells_in_axis(cell_in_axis : Vector3i, axis : Vector3) -> AABB:
 		return AABB(cell_position, first_cell - cell_position)
 
 # The variant is either null or the found position
-func find_ground(player_position : Vector3i) -> Variant:
+func find_ground(player_position : Vector3i, cell_visible : bool = true) -> Variant:
 	var axis : Vector3 = camera_origin.get_camera_normal()
 	var limits = get_iteration_limits(player_position, axis)
 	
@@ -176,3 +176,8 @@ func empty_at_position(cell_position : Vector3i) -> bool:
 func is_cell_visible(cell_position : Vector3i) -> bool:
 	var camera_normal : Vector3i = camera_origin.get_camera_normal()
 	return get_visible_cells_in_axis(cell_position, camera_normal).has_point(cell_position)
+
+func is_cell_on_ground(cell_position : Vector3i) -> bool:
+	var ground_cell_position := cell_position + Vector3i(Vector3.DOWN * camera_origin.basis)
+	var item_id : int = get_cell_item(ground_cell_position)
+	return Globals.GROUND_CELLS.has(mesh_library.get_item_name(item_id))
