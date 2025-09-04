@@ -173,6 +173,6 @@ func find_ground(player_position : Vector3i) -> Variant:
 func empty_at_position(cell_position : Vector3i) -> bool:
 	return get_cell_item(cell_position) == INVALID_CELL_ITEM
 
-func cell_in_view(cell_position : Vector3i) -> bool:
+func is_cell_visible(cell_position : Vector3i) -> bool:
 	var camera_normal : Vector3i = camera_origin.get_camera_normal()
 	return get_visible_cells_in_axis(cell_position, camera_normal).has_point(cell_position)
