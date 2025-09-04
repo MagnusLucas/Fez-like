@@ -1,16 +1,29 @@
-[gd_scene load_steps=12 format=3 uid="uid://b3lvivi6ooeb7"]
+[gd_scene load_steps=13 format=3 uid="uid://b3lvivi6ooeb7"]
 
 [ext_resource type="MeshLibrary" uid="uid://dkjwbfrjn1hdo" path="res://MeshLib/mesh_library.tres" id="1_q4cwg"]
 [ext_resource type="Script" uid="uid://b363upmfmhid" path="res://ScriptsAndScenes/map.gd" id="2_ogd5d"]
 [ext_resource type="Script" uid="uid://sbliytswwjwo" path="res://ScriptsAndScenes/camera.gd" id="3_6yy2s"]
 [ext_resource type="PackedScene" uid="uid://bynqkp5rcr2mr" path="res://ScriptsAndScenes/lighting.tscn" id="3_ogd5d"]
 [ext_resource type="Script" uid="uid://d4caoct14id75" path="res://ScriptsAndScenes/debug_camera.gd" id="4_wu0vh"]
-[ext_resource type="Texture2D" uid="uid://blmvrkyl8wvcw" path="res://Assets/Environment/2d_sky_bg_upscaled.png" id="5_dhrlk"]
-[ext_resource type="Script" uid="uid://cetj33wf6wo5b" path="res://ScriptsAndScenes/bg_node_timer.gd" id="6_fr7lr"]
-[ext_resource type="PackedScene" uid="uid://cb1m4x0wa3cdr" path="res://ScriptsAndScenes/cloud_sprite.tscn" id="6_wo57b"]
-[ext_resource type="Texture2D" uid="uid://dn6rhn8qcc3wq" path="res://Assets/Environment/2d_cloud_big.png" id="7_oqou8"]
-[ext_resource type="Texture2D" uid="uid://dq3ddybtsm1rl" path="res://Assets/Environment/2d_cloud_med.png" id="8_hbj3j"]
-[ext_resource type="Texture2D" uid="uid://b4g3p87cl3o6x" path="res://Assets/Environment/2d_cloud_sma.png" id="9_ccj3h"]
+[ext_resource type="Script" uid="uid://cns18ivfei0ue" path="res://ScriptsAndScenes/2d_bg_sub_viewport.gd" id="5_ccj3h"]
+[ext_resource type="PackedScene" uid="uid://biud0s3t8junj" path="res://ScriptsAndScenes/sky_node_2d.tscn" id="6_fr7lr"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_fr7lr"]
+viewport_path = NodePath("2DBgSubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fr7lr"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_fr7lr")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wo57b"]
+material = SubResource("StandardMaterial3D_fr7lr")
+size = Vector2(55.78, 32.74)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_wo57b"]
+viewport_path = NodePath("2DBgSubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_xknmn"]
+viewport_path = NodePath("2DBgSubViewport")
 
 [node name="Map" type="GridMap"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, -0.5)
@@ -32,68 +45,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 23.119)
 projection = 1
 current = true
 size = 30.0
-far = 100.0
+far = 65.0
 
-[node name="BgNode" type="Node3D" parent="CameraOrigin"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -77.8379)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CameraOrigin"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -27.1517)
+visible = false
+mesh = SubResource("PlaneMesh_wo57b")
+skeleton = NodePath("../Camera3D")
 
-[node name="SkySprite3D" type="Sprite3D" parent="CameraOrigin/BgNode"]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 29.6702)
-texture = ExtResource("5_dhrlk")
-
-[node name="Marker3DStop" type="Marker3D" parent="CameraOrigin/BgNode"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.8556, 0.52, 60)
-
-[node name="Marker3DStart" type="Marker3D" parent="CameraOrigin/BgNode"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.177, 0.52, 60)
-
-[node name="Timer" type="Timer" parent="CameraOrigin/BgNode/Marker3DStart"]
-autostart = true
-script = ExtResource("6_fr7lr")
-
-[node name="CloudSprite3D" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.106, 6.705, 0)
-texture = ExtResource("7_oqou8")
-
-[node name="CloudSprite3D6" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.5563, 0.904402, 0)
-texture = ExtResource("7_oqou8")
-
-[node name="CloudSprite3D2" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.519, 2.953, 0)
-texture = ExtResource("7_oqou8")
-
-[node name="CloudSprite3D3" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.104, 3.866, 0)
-texture = ExtResource("8_hbj3j")
-
-[node name="CloudSprite3D7" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3815, 1.7571, 0)
-texture = ExtResource("8_hbj3j")
-
-[node name="CloudSprite3D8" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6971, 5.87637, 0)
-texture = ExtResource("8_hbj3j")
-
-[node name="CloudSprite3D4" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.177, -0.52, 0)
-texture = ExtResource("9_ccj3h")
-
-[node name="CloudSprite3D5" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.53, 6.128, 0)
-texture = ExtResource("9_ccj3h")
-
-[node name="CloudSprite3D9" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.5181, 0.445154, 0)
-texture = ExtResource("9_ccj3h")
-
-[node name="CloudSprite3D10" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.66106, 0.195547, 0)
-texture = ExtResource("9_ccj3h")
-
-[node name="CloudSprite3D11" parent="CameraOrigin/BgNode/Marker3DStart" instance=ExtResource("6_wo57b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.2764, 6.36599, 0)
-texture = ExtResource("9_ccj3h")
+[node name="SkySprite3D" type="Sprite3D" parent="CameraOrigin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32.4795)
+pixel_size = 0.05
+texture_filter = 0
+texture = SubResource("ViewportTexture_wo57b")
 
 [node name="DebugCameraOrigin" type="Node3D" parent="."]
 script = ExtResource("4_wu0vh")
@@ -101,4 +65,14 @@ script = ExtResource("4_wu0vh")
 [node name="DebugCamera" type="Camera3D" parent="DebugCameraOrigin"]
 transform = Transform3D(0.6554, -0.377641, 0.654093, 0, 0.866025, 0.5, -0.755282, -0.3277, 0.567593, 6.20868, 4.78058, 9.82226)
 
-[connection signal="timeout" from="CameraOrigin/BgNode/Marker3DStart/Timer" to="CameraOrigin/BgNode/Marker3DStart/Timer" method="_on_timeout"]
+[node name="2DBgSubViewport" type="SubViewport" parent="."]
+disable_3d = true
+size = Vector2i(1152, 648)
+script = ExtResource("5_ccj3h")
+
+[node name="SkyNode2D" parent="2DBgSubViewport" instance=ExtResource("6_fr7lr")]
+
+[node name="SubViewportPreview" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("ViewportTexture_xknmn")
+centered = false

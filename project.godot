@@ -13,6 +13,7 @@ config_version=5
 config/name="Fez-like"
 run/main_scene="uid://3iay6ji5nbek"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+config/icon="res://icon.svg"
 
 [autoload]
 
