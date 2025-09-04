@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://b363upmfmhid" path="res://ScriptsAndScenes/map.gd" id="2_njngi"]
 [ext_resource type="Script" uid="uid://sbliytswwjwo" path="res://ScriptsAndScenes/camera.gd" id="3_6yc6o"]
 
-[node name="Map" type="GridMap"]
+[node name="Map2" type="GridMap"]
 mesh_library = ExtResource("1_c7s6e")
 cell_size = Vector3(1, 1, 1)
 data = {
