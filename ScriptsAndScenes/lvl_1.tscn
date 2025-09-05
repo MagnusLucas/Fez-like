@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b3lvivi6ooeb7"]
+[gd_scene load_steps=13 format=3 uid="uid://b3lvivi6ooeb7"]
 
 [ext_resource type="MeshLibrary" uid="uid://dkjwbfrjn1hdo" path="res://MeshLib/mesh_library.tres" id="1_q4cwg"]
 [ext_resource type="Script" uid="uid://b363upmfmhid" path="res://ScriptsAndScenes/map.gd" id="2_ogd5d"]
@@ -22,12 +22,6 @@ albedo_color = Color(0, 0, 0, 1)
 emission_enabled = true
 emission_texture = SubResource("ViewportTexture_3ca77")
 texture_filter = 0
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_wo57b"]
-viewport_path = NodePath("2DBgSubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_xknmn"]
-viewport_path = NodePath("2DBgSubViewport")
 
 [node name="Map" type="GridMap"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, -0.5)
@@ -57,14 +51,6 @@ mesh = SubResource("PlaneMesh_wo57b")
 skeleton = NodePath("../Camera3D")
 surface_material_override/0 = SubResource("StandardMaterial3D_fr7lr")
 
-[node name="SkySprite3D" type="Sprite3D" parent="CameraOrigin"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32.2591)
-visible = false
-pixel_size = 0.05
-double_sided = false
-texture_filter = 0
-texture = SubResource("ViewportTexture_wo57b")
-
 [node name="Marker3DStop" type="Marker3D" parent="CameraOrigin"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.589, 0, -27.2264)
 
@@ -73,6 +59,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.1781, 0, -27.2264)
 
 [node name="CloudSprite3D2" parent="CameraOrigin/Marker3DStart" instance=ExtResource("5_qeoxk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54.0101, 0, 0)
+
+[node name="CloudSprite3D3" parent="CameraOrigin/Marker3DStart" instance=ExtResource("5_qeoxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.3609, -6.04693, 0)
+
+[node name="CloudSprite3D4" parent="CameraOrigin/Marker3DStart" instance=ExtResource("5_qeoxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.9742, -3.29833, 0)
+
+[node name="CloudSprite3D5" parent="CameraOrigin/Marker3DStart" instance=ExtResource("5_qeoxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.6234, 8.10839, 0)
+
+[node name="CloudSprite3D6" parent="CameraOrigin/Marker3DStart" instance=ExtResource("5_qeoxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.1005, 8.10839, 0)
+
+[node name="CloudSprite3D7" parent="CameraOrigin/Marker3DStart" instance=ExtResource("5_qeoxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.4424, -2.47374, 0)
+
+[node name="CloudSprite3D8" parent="CameraOrigin/Marker3DStart" instance=ExtResource("5_qeoxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.4748, -10.857, 0)
+
+[node name="CloudSprite3D9" parent="CameraOrigin/Marker3DStart" instance=ExtResource("5_qeoxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.2312, 8.10839, 0)
+
+[node name="CloudSprite3D10" parent="CameraOrigin/Marker3DStart" instance=ExtResource("5_qeoxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.667, -8.65811, 0)
+
+[node name="CloudSprite3D11" parent="CameraOrigin/Marker3DStart" instance=ExtResource("5_qeoxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.90942, -6.04693, 0)
 
 [node name="Timer" type="Timer" parent="CameraOrigin/Marker3DStart"]
 autostart = true
@@ -93,11 +106,5 @@ script = ExtResource("5_ccj3h")
 texture_filter = 1
 scale = Vector2(3, 1.5)
 texture = ExtResource("3_wo57b")
-
-[node name="SubViewportPreview" type="Sprite2D" parent="."]
-visible = false
-texture_filter = 1
-texture = SubResource("ViewportTexture_xknmn")
-centered = false
 
 [connection signal="timeout" from="CameraOrigin/Marker3DStart/Timer" to="CameraOrigin/Marker3DStart/Timer" method="_on_timeout"]
