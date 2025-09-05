@@ -12,3 +12,4 @@ func _ready():
 	#sky_sprite_3d.size = size
 	# Retrieve the texture and set it to the viewport sprite.
 	#sky_sprite_3d.texture = get_texture()
+	#mesh_instance_3d.material_override = get_texture()

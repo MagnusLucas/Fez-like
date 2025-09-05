@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b3lvivi6ooeb7"]
+[gd_scene load_steps=14 format=3 uid="uid://b3lvivi6ooeb7"]
 
 [ext_resource type="MeshLibrary" uid="uid://dkjwbfrjn1hdo" path="res://MeshLib/mesh_library.tres" id="1_q4cwg"]
 [ext_resource type="Script" uid="uid://b363upmfmhid" path="res://ScriptsAndScenes/map.gd" id="2_ogd5d"]
@@ -6,18 +6,21 @@
 [ext_resource type="PackedScene" uid="uid://bynqkp5rcr2mr" path="res://ScriptsAndScenes/lighting.tscn" id="3_ogd5d"]
 [ext_resource type="Script" uid="uid://d4caoct14id75" path="res://ScriptsAndScenes/debug_camera.gd" id="4_wu0vh"]
 [ext_resource type="Script" uid="uid://cns18ivfei0ue" path="res://ScriptsAndScenes/2d_bg_sub_viewport.gd" id="5_ccj3h"]
+[ext_resource type="Texture2D" uid="uid://dn6rhn8qcc3wq" path="res://Assets/Environment/2d_cloud_big.png" id="5_wo57b"]
 [ext_resource type="PackedScene" uid="uid://biud0s3t8junj" path="res://ScriptsAndScenes/sky_node_2d.tscn" id="6_fr7lr"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_fr7lr"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_wo57b"]
+size = Vector2(55.78, 32.74)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_qeoxk"]
 viewport_path = NodePath("2DBgSubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fr7lr"]
 resource_local_to_scene = true
-albedo_texture = SubResource("ViewportTexture_fr7lr")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_wo57b"]
-material = SubResource("StandardMaterial3D_fr7lr")
-size = Vector2(55.78, 32.74)
+albedo_texture = SubResource("ViewportTexture_qeoxk")
+metallic_specular = 0.0
+emission = Color(0.17, 0.17, 0.17, 1)
+texture_filter = 0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_wo57b"]
 viewport_path = NodePath("2DBgSubViewport")
@@ -48,16 +51,22 @@ size = 30.0
 far = 65.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CameraOrigin"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -27.1517)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -31.5871)
 visible = false
 mesh = SubResource("PlaneMesh_wo57b")
 skeleton = NodePath("../Camera3D")
+surface_material_override/0 = SubResource("StandardMaterial3D_fr7lr")
 
 [node name="SkySprite3D" type="Sprite3D" parent="CameraOrigin"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32.4795)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32.2591)
 pixel_size = 0.05
+double_sided = false
 texture_filter = 0
 texture = SubResource("ViewportTexture_wo57b")
+
+[node name="Sprite3D" type="Sprite3D" parent="CameraOrigin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5972, 0, -23.3478)
+texture = ExtResource("5_wo57b")
 
 [node name="DebugCameraOrigin" type="Node3D" parent="."]
 script = ExtResource("4_wu0vh")
@@ -74,5 +83,6 @@ script = ExtResource("5_ccj3h")
 
 [node name="SubViewportPreview" type="Sprite2D" parent="."]
 visible = false
+texture_filter = 1
 texture = SubResource("ViewportTexture_xknmn")
 centered = false
