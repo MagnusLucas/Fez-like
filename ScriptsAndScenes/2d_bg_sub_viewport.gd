@@ -2,7 +2,7 @@ extends SubViewport
 
 @onready var _2d_bg_sub_viewport = $"."
 #@onready var mesh_instance_3d = $"../CameraOrigin/MeshInstance3D"
-@onready var sky_sprite_3d = $"../CameraOrigin/SkySprite3D"
+#@onready var sky_sprite_3d = $"../CameraOrigin/SkySprite3D"
 
 func _ready():
 	size = get_parent().get_viewport().size

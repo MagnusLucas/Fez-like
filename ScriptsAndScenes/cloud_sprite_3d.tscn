@@ -1,0 +1,11 @@
+[gd_scene load_steps=5 format=3 uid="uid://cb1m4x0wa3cdr"]
+
+[ext_resource type="Script" uid="uid://ns8r08gqwgj2" path="res://ScriptsAndScenes/cloud_sprite_3d.gd" id="1_4lfsh"]
+[ext_resource type="Texture2D" uid="uid://dn6rhn8qcc3wq" path="res://Assets/Environment/2d_cloud_big.png" id="2_tpxmh"]
+[ext_resource type="Texture2D" uid="uid://dq3ddybtsm1rl" path="res://Assets/Environment/2d_cloud_med.png" id="3_5fmdh"]
+[ext_resource type="Texture2D" uid="uid://b4g3p87cl3o6x" path="res://Assets/Environment/2d_cloud_sma.png" id="4_3vh6k"]
+
+[node name="CloudSprite3D" type="Sprite3D"]
+texture_filter = 0
+script = ExtResource("1_4lfsh")
+textures = Array[Texture]([ExtResource("2_tpxmh"), ExtResource("3_5fmdh"), ExtResource("4_3vh6k")])
