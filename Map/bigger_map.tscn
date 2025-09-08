@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dj82xvj8n5tju"]
+[gd_scene load_steps=6 format=3 uid="uid://dj82xvj8n5tju"]
 
 [ext_resource type="MeshLibrary" uid="uid://dkjwbfrjn1hdo" path="res://Map/mesh_library.tres" id="1_hnu74"]
 [ext_resource type="Script" uid="uid://b363upmfmhid" path="res://Map/map.gd" id="2_k7kom"]
 [ext_resource type="Script" uid="uid://sbliytswwjwo" path="res://camera.gd" id="3_1qd0v"]
 [ext_resource type="Script" uid="uid://d4caoct14id75" path="res://Map/debug_camera.gd" id="4_k7kom"]
+[ext_resource type="PackedScene" uid="uid://bynqkp5rcr2mr" path="res://Map/lighting.tscn" id="5_1qd0v"]
 
 [node name="Map" type="GridMap"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, -0.5)
@@ -30,3 +31,5 @@ script = ExtResource("4_k7kom")
 
 [node name="DebugCamera" type="Camera3D" parent="DebugCameraOrigin"]
 transform = Transform3D(0.6554, -0.377641, 0.654093, 0, 0.866025, 0.5, -0.755282, -0.3277, 0.567593, 6.20868, 4.78058, 9.82226)
+
+[node name="Lighting" parent="." instance=ExtResource("5_1qd0v")]

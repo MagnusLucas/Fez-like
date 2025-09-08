@@ -105,7 +105,7 @@ func neighbourhood_conditions_fulfilled(cell_position : Vector3i,
 			return false
 	return true
 
-func find_cell_in_axis(first_cell : Vector3, last_cell : Vector3, 
+func find_cell_in_axis(first_cell : Vector3, last_cell : Vector3,  
 		conditions : Dictionary) -> Variant:
 	
 	var iteration_size := int((last_cell - first_cell).length())
@@ -135,7 +135,7 @@ func get_iteration_limits(cell_in_axis : Vector3i, axis : Vector3 = camera_origi
 		first_axis_cell = last_axis_cell
 		last_axis_cell = tmp
 	
-	return {"first_cell" : first_axis_cell, "last_cell" : last_axis_cell}
+	return {"first_cell" : first_axis_cell.round(), "last_cell" : last_axis_cell.round()}
 
 # One could check all cells on map for whether they are on the axis
 # Or all coordinates on axis for whether they have a cell
@@ -161,7 +161,7 @@ func get_visible_cells_in_axis(cell_in_axis : Vector3i, axis : Vector3) -> AABB:
 # The variant is either null or the found position
 func find_ground(player_position : Vector3i, cell_visible : bool = true) -> Variant:
 	var axis : Vector3 = camera_origin.get_camera_normal()
-	var limits = get_iteration_limits(player_position, axis)
+	var limits = get_iteration_limits(player_position, (1 if cell_visible else -1) * axis)
 	
 	var first_axis_cell : Vector3i = limits["first_cell"]
 	var last_axis_cell : Vector3i = limits["last_cell"]
@@ -176,8 +176,3 @@ func empty_at_position(cell_position : Vector3i) -> bool:
 func is_cell_visible(cell_position : Vector3i) -> bool:
 	var camera_normal : Vector3i = camera_origin.get_camera_normal()
 	return get_visible_cells_in_axis(cell_position, camera_normal).has_point(cell_position)
-
-func is_cell_on_ground(cell_position : Vector3i) -> bool:
-	var ground_cell_position := cell_position + Vector3i(Vector3.DOWN * camera_origin.basis)
-	var item_id : int = get_cell_item(ground_cell_position)
-	return Globals.GROUND_CELLS.has(mesh_library.get_item_name(item_id))
