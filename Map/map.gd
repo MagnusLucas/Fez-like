@@ -81,17 +81,21 @@ func str_to_vec(string : String, global : bool = false) -> Vector3i:
 		return result
 
 func cell_conditions_fulfilled(cell_position : Vector3i, 
-		searched_type_names : Array, exclusive : bool = false) -> bool:
+		conditions : Dictionary) -> bool:
 	
+	# conditions : Dictionary = {"type_names" : {type_name_1 : bool, type_name_3 : bool}, "visible" : bool}
 	var cell_id : int = get_cell_item(cell_position)
+	if conditions.has("visible"):
+		if conditions["visible"] != is_cell_visible(cell_position):
+			return false
 	if cell_id == INVALID_CELL_ITEM:
-		if searched_type_names.has("") and not exclusive:
+		if conditions["type_names"].has("EMPTY"):
 			return true
 		else:
 			return false
 	
 	var cell_name = mesh_library.get_item_name(cell_id)
-	return searched_type_names.has(cell_name) and not exclusive
+	return conditions["type_names"].has(cell_name)
 
 func is_cell_walkable(cell_position : Vector3i) -> bool:
 	var conditions : Dictionary = {"SELF" : [""], "DOWN" : Globals.GROUND_CELLS}
@@ -166,7 +170,7 @@ func find_ground(player_position : Vector3i, cell_visible : bool = true) -> Vari
 	var first_axis_cell : Vector3i = limits["first_cell"]
 	var last_axis_cell : Vector3i = limits["last_cell"]
 	
-	var conditions : Dictionary = {"SELF" : [""], "DOWN" : Globals.GROUND_CELLS}
+	var conditions : Dictionary = {"SELF" : {"type_names" : {"EMPTY" : true}}, "DOWN" : Globals.GROUND_CELLS}
 	
 	return find_cell_in_axis(first_axis_cell, last_axis_cell, conditions)
 
