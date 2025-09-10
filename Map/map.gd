@@ -14,15 +14,19 @@ const SCRIPTED_SCENES : Dictionary[String, Resource] = {
 @export var camera_follows_player : bool = true
 @onready var camera_origin: CameraOrigin = $CameraOrigin
 
+var visible_cells : Dictionary
+var used_aabb : AABB
 
 func _ready() -> void:
 	_instantiate_scripted_scenes()
-	get_visible_cells_in_axis(Vector3.ZERO, Vector3.FORWARD)
+	used_aabb = get_used_AABB()
+	calculate_axis_visibility(Basis.IDENTITY)
 	if camera_follows_player:
 		var player : Player = find_child("Player", false, false)
 		camera_origin.player = player
 		
 		camera_origin.connect("camera_rotation_started", player.handle_camera_rotation_started)
+		camera_origin.connect("camera_rotation_started", calculate_axis_visibility)
 		camera_origin.connect("camera_rotation_finished", player.handle_camera_rotation_finished)
 
 func _instantiate_scripted_scenes() -> void:
@@ -80,6 +84,26 @@ func str_to_vec(string : String, global : bool = false) -> Vector3i:
 		result = Vector3(result) * camera_basis.inverse()
 		return result
 
+func calculate_axis_visibility(new_basis : Basis) -> void:
+	var new_camera_normal : Vector3 = (Vector3.FORWARD * new_basis.inverse()).round()
+	var checked_axes : Vector3 = Vector3.ONE - abs(new_camera_normal)
+	
+	var iteration_plane : AABB = AABB(used_aabb.position, used_aabb.size * checked_axes)
+	
+	visible_cells = {}
+	
+	for x in iteration_plane.size.x + 1:
+		for y in iteration_plane.size.y + 1:
+			for z in iteration_plane.size.z + 1:
+				var cell_coordinates : Vector3i = (used_aabb.position * checked_axes + Vector3(x,y,z)).round()
+				
+				visible_cells[cell_coordinates] = get_visible_cells_in_axis(cell_coordinates, new_camera_normal)
+	return
+
+
+func get_axis_coords(point_on_axis : Vector3i, axis : Vector3i = camera_origin.get_camera_normal()) -> Vector3i:
+	return point_on_axis * (Vector3i.ONE - abs(axis))
+
 func cell_conditions_fulfilled(cell_position : Vector3i, 
 		conditions : Dictionary) -> bool:
 	
@@ -98,7 +122,8 @@ func cell_conditions_fulfilled(cell_position : Vector3i,
 	return conditions["type_names"].has(cell_name)
 
 func is_cell_walkable(cell_position : Vector3i) -> bool:
-	var conditions : Dictionary = {"SELF" : [""], "DOWN" : Globals.GROUND_CELLS}
+	var conditions : Dictionary = {"SELF" : Globals.EMPTY_CELL, 
+		"DOWN" : Globals.GROUND_CELLS}
 	return neighbourhood_conditions_fulfilled(cell_position, conditions)
 
 func neighbourhood_conditions_fulfilled(cell_position : Vector3i, 
@@ -131,7 +156,7 @@ func get_iteration_limits(cell_in_axis : Vector3i, axis : Vector3 = camera_origi
 	var axis_coordinates = (Vector3.ONE - abs(axis)) * Vector3(cell_in_axis)
 	var positive_axis : bool = axis == abs(axis) 
 	
-	# Making sure the iteration always goes along FORWARD of camera, so that first seen cell is the end of view
+	# Making sure the iteration always goes along FORWARD of camera
 	var first_axis_cell : Vector3 = used_AABB.position * abs(axis) + axis_coordinates
 	var last_axis_cell : Vector3 = used_AABB.end * abs(axis) + axis_coordinates
 	if !positive_axis:
@@ -170,7 +195,7 @@ func find_ground(player_position : Vector3i, cell_visible : bool = true) -> Vari
 	var first_axis_cell : Vector3i = limits["first_cell"]
 	var last_axis_cell : Vector3i = limits["last_cell"]
 	
-	var conditions : Dictionary = {"SELF" : {"type_names" : {"EMPTY" : true}}, "DOWN" : Globals.GROUND_CELLS}
+	var conditions : Dictionary = {"SELF" : Globals.EMPTY_CELL, "DOWN" : Globals.GROUND_CELLS}
 	
 	return find_cell_in_axis(first_axis_cell, last_axis_cell, conditions)
 
@@ -178,5 +203,8 @@ func empty_at_position(cell_position : Vector3i) -> bool:
 	return get_cell_item(cell_position) == INVALID_CELL_ITEM
 
 func is_cell_visible(cell_position : Vector3i) -> bool:
-	var camera_normal : Vector3i = camera_origin.get_camera_normal()
-	return get_visible_cells_in_axis(cell_position, camera_normal).has_point(cell_position)
+	var axis_coords : Vector3i = get_axis_coords(cell_position)
+	if !visible_cells.has(axis_coords):
+		return true
+	var visible_aabb : AABB = visible_cells[axis_coords]
+	return visible_aabb.has_point(cell_position)

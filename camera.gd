@@ -6,8 +6,8 @@ var can_rotate : bool = true
 # Used only if the camera should follow the player
 var player : Player = null
 
-signal camera_rotation_finished(basis : Basis)
-signal camera_rotation_started()
+signal camera_rotation_finished()
+signal camera_rotation_started(basis : Basis)
 
 func _process(_delta: float) -> void:
 	if player:
@@ -29,11 +29,13 @@ func tween_y_rotation(angle_radians : float) -> void:
 	const TWEEN_TIME = 1
 	var tween : Tween = get_tree().create_tween()
 	can_rotate = false
-	camera_rotation_started.emit()
+	var future_basis = basis.rotated(Vector3.UP, -angle_radians)
+	camera_rotation_started.emit(future_basis)
 	tween.tween_property(self, "rotation:y", rotation.y - angle_radians, TWEEN_TIME)
+	
 	tween.finished.connect(func() -> void: 
 		can_rotate = true
-		camera_rotation_finished.emit(basis)
+		camera_rotation_finished.emit()
 	)
 
 func get_camera_normal() -> Vector3:

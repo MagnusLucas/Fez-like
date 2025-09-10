@@ -16,20 +16,26 @@ func check_position(delta : float) -> void:
 	if current_cells == future_cells:
 		return
 	
-	#var player_visibility : Variant = _is_player_visibile(current_cells)
-	#var future_player_visibility : Variant = _is_player_visibile(future_cells)
-	var visibility_change := _visibility_change(current_cells, future_cells)
-	#var player_position : Vector3i = map.local_to_map(player.position)
+	var player_visibility : Variant = _is_player_visibile(current_cells)
+	var future_player_visibility : Variant = _is_player_visibile(future_cells)
+	var visibility_change : float = _visibility_change(current_cells, future_cells)
+	var player_position : Vector3i = map.local_to_map(player.position)
 	
-	#var new_cells : Array[Vector3i] = Globals.subtract_arrays(future_cells, current_cells)
-	#var old_cells : Array[Vector3i] = Globals.subtract_arrays(current_cells, future_cells)
+	var new_cells : Array[Vector3i] = Globals.subtract_arrays(future_cells, current_cells)
+	var old_cells : Array[Vector3i] = Globals.subtract_arrays(current_cells, future_cells)
 	
 	if visibility_change < 0: # Getting less visible
+		if new_cells.is_empty():
+			return # Already tried preventing it
 		pass
-	#if new_cells.is_empty():
-		#_handle_exiting_cells(player_visibility, player_position, future_player_visibility)
-	#else:
-		#_handle_entering_cells(player_visibility, player_position, future_player_visibility, new_cells)
+	
+	elif visibility_change == 0:
+		# Keep on ground
+		if old_cells.is_empty():
+			return
+		_handle_exiting_cells(future_cells, player_position, future_player_visibility)
+	else:
+		pass
 
 
 func align_in_cell(axis : Vector3) -> void:
@@ -149,33 +155,28 @@ func _is_player_visibile(inhabited_cells : Array[Vector3i]) -> Variant:
 	#else:
 		#return
 
-#func _handle_exiting_cells(player_visibility : Variant, player_position : Vector3i,
-		#future_player_visibility : Variant) -> void:
-	## Might have lost ground
-	## If so - find ground
-	## With correct visibility
-	#
-	## Are there any other important cases?
-	#if player_visibility == null:
-		## Visibility might be determined after this movement
-		## Check if determined
-		#if future_player_visibility == null:
-			## Undetermined in both, player should be only moved to positions
-			## where it's still undetermined IG
-			## TODO: For later implementation
-			#return
-		#else:
-			#player_visibility = future_player_visibility
-	#
-	#if map.is_cell_walkable(player_position):
-		#return
-	#else:
-		#var ground : Variant = map.find_ground(player_position, bool(player_visibility))
-		#if ground == null:
-			#return
-		#else:
-			##print(player_position, ground)
-			#move_to_cell(ground)
+func _handle_exiting_cells(future_player_cells : Array[Vector3i], future_player_position : Vector3i,
+		future_player_visibility : Variant) -> void:
+	# Might have lost ground
+	# If so - find ground
+	# With correct visibility
+	
+	var cells_to_check : Array[Vector3i]
+	
+	# Checking cells that could have ground underneath
+	for cell in [future_player_position - Vector3i(player.basis.x.round()),
+			future_player_position, future_player_position + Vector3i(player.basis.x.round())]:
+		if future_player_cells.has(cell):
+			if map.is_cell_walkable(cell):
+				return
+			cells_to_check.append(cell)
+	
+	for cell in cells_to_check:
+		# TODO: Change find_ground to consider visibility!
+		var ground : Variant = map.find_ground(cell, bool(future_player_visibility))
+		if ground != null:
+			move_to_cell(Vector3i(ground.round()) - (cell - future_player_position))
+			return
 
 func _visibility_change(old_cells : Array[Vector3i], new_cells : Array[Vector3i]) -> float:
 	var old_visibility := 0.0

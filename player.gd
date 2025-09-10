@@ -23,7 +23,6 @@ func _process(delta: float) -> void:
 	var previous_velocity : Vector3 = velocity
 	_move(delta)
 	_update_animation(previous_velocity)
-	_update_visibility()
 
 func _move(delta: float) -> void:
 	if can_move:
@@ -33,6 +32,7 @@ func _move(delta: float) -> void:
 		teleporter.check_position(delta)
 	_update_facing_direction()
 	move_and_slide()
+	_update_visibility()
 
 func _handle_input() -> void:
 	var local_velocity : Vector3 = velocity * basis
@@ -82,15 +82,16 @@ func _update_visibility() -> void:
 		sprite.modulate = Color.WHITE
 
 
-func handle_camera_rotation_started() -> void:
+func handle_camera_rotation_started(new_basis : Basis) -> void:
+	basis = new_basis
+	
 	velocity = Vector3.ZERO
 	can_move = false
 	
 	sprite.play("idle")
 	sprite.pause()
 
-func handle_camera_rotation_finished(new_basis : Basis) -> void:
-	basis = new_basis
+func handle_camera_rotation_finished() -> void:
 	can_move = true
 	
 	sprite.play()
