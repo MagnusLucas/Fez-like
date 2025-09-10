@@ -20,6 +20,8 @@ var used_aabb : AABB
 func _ready() -> void:
 	_instantiate_scripted_scenes()
 	used_aabb = get_used_AABB()
+	used_aabb.position -= Vector3.ONE # Fix so that the player can never bump their head
+	used_aabb.size += Vector3.ONE * 2 # Remove to allow it
 	calculate_axis_visibility(Basis.IDENTITY)
 	if camera_follows_player:
 		var player : Player = find_child("Player", false, false)
