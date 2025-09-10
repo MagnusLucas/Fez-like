@@ -40,6 +40,7 @@ func _instantiate_scripted_scenes() -> void:
 			instance.position = map_to_local(cell_position)
 			set_cell_item(cell_position, INVALID_CELL_ITEM)
 
+
 func get_used_AABB() -> AABB:
 	var used_cells : Array[Vector3i] = get_used_cells()
 	var min_x = +INF
@@ -63,26 +64,6 @@ func get_used_AABB() -> AABB:
 			max_z = cell.z
 	return AABB(Vector3i(min_x, min_y, min_z), Vector3i(max_x - min_x, max_y - min_y, max_z - min_z))
 
-func str_to_vec(string : String, global : bool = false) -> Vector3i:
-	var result = Vector3i.ZERO
-	if string.contains("LEFT"):
-		result += Vector3i.LEFT
-	elif string.contains("RIGHT"):
-		result += Vector3i.RIGHT
-	if string.contains("DOWN"):
-		result += Vector3i.DOWN
-	elif string.contains("UP"):
-		result += Vector3i.UP
-	if string.contains("BACK"):
-		result += Vector3i.BACK
-	elif string.contains("FORWARD"):
-		result += Vector3i.FORWARD
-	if global:
-		return result
-	else:
-		var camera_basis : Basis = camera_origin.basis
-		result = Vector3(result) * camera_basis.inverse()
-		return result
 
 func calculate_axis_visibility(new_basis : Basis) -> void:
 	var new_camera_normal : Vector3 = (Vector3.FORWARD * new_basis.inverse()).round()
@@ -104,38 +85,18 @@ func calculate_axis_visibility(new_basis : Basis) -> void:
 func get_axis_coords(point_on_axis : Vector3i, axis : Vector3i = camera_origin.get_camera_normal()) -> Vector3i:
 	return point_on_axis * (Vector3i.ONE - abs(axis))
 
-func cell_conditions_fulfilled(cell_position : Vector3i, 
-		conditions : Dictionary) -> bool:
-	
-	# conditions : Dictionary = {"type_names" : {type_name_1 : bool, type_name_3 : bool}, "visible" : bool}
-	var cell_id : int = get_cell_item(cell_position)
-	if conditions.has("visible"):
-		if conditions["visible"] != is_cell_visible(cell_position):
-			return false
-	if cell_id == INVALID_CELL_ITEM:
-		if conditions["type_names"].has("EMPTY"):
-			return true
-		else:
-			return false
-	
-	var cell_name = mesh_library.get_item_name(cell_id)
-	return conditions["type_names"].has(cell_name)
-
 func is_cell_walkable(cell_position : Vector3i) -> bool:
-	var conditions : Dictionary = {"SELF" : Globals.EMPTY_CELL, 
-		"DOWN" : Globals.GROUND_CELLS}
-	return neighbourhood_conditions_fulfilled(cell_position, conditions)
+	return neighbourhood_conditions_fulfilled(cell_position, Condition.ground_conditions())
 
 func neighbourhood_conditions_fulfilled(cell_position : Vector3i, 
-		conditions : Dictionary) -> bool:
+		conditions : Array[Condition]) -> bool:
 	for condition in conditions:
-		if !cell_conditions_fulfilled(cell_position + str_to_vec(condition),
-				conditions[condition]):
+		if !condition.evaluate(self, cell_position, camera_origin.basis):
 			return false
 	return true
 
 func find_cell_in_axis(first_cell : Vector3, last_cell : Vector3,  
-		conditions : Dictionary) -> Variant:
+		conditions : Array[Condition]) -> Variant:
 	
 	var iteration_size := int((last_cell - first_cell).length())
 	var axis : Vector3 = (last_cell - first_cell)/iteration_size
@@ -147,18 +108,17 @@ func find_cell_in_axis(first_cell : Vector3, last_cell : Vector3,
 			return cell_position
 	return null
 
-func find_cell(cell_in_axis : Vector3i, conditions : Dictionary) -> Variant:
+func find_cell(cell_in_axis : Vector3i, conditions : Array[Condition]) -> Variant:
 	var limits = get_iteration_limits(cell_in_axis)
 	return find_cell_in_axis(limits["first_cell"], limits["last_cell"], conditions)
 
 func get_iteration_limits(cell_in_axis : Vector3i, axis : Vector3 = camera_origin.get_camera_normal()) -> Dictionary:
-	var used_AABB : AABB = get_used_AABB()
 	var axis_coordinates = (Vector3.ONE - abs(axis)) * Vector3(cell_in_axis)
 	var positive_axis : bool = axis == abs(axis) 
 	
 	# Making sure the iteration always goes along FORWARD of camera
-	var first_axis_cell : Vector3 = used_AABB.position * abs(axis) + axis_coordinates
-	var last_axis_cell : Vector3 = used_AABB.end * abs(axis) + axis_coordinates
+	var first_axis_cell : Vector3 = used_aabb.position * abs(axis) + axis_coordinates
+	var last_axis_cell : Vector3 = used_aabb.end * abs(axis) + axis_coordinates
 	if !positive_axis:
 		var tmp : Vector3 = first_axis_cell
 		first_axis_cell = last_axis_cell
@@ -176,10 +136,9 @@ func get_visible_cells_in_axis(cell_in_axis : Vector3i, axis : Vector3) -> AABB:
 	var first_cell = limits["first_cell"]
 	var last_cell = limits["last_cell"]
 	
-	var conditions : Dictionary = {"SELF" : Globals.VIEW_OBSTRUCTING_CELLS}
+	var conditions : Array[Condition] = [Condition.new("SELF", Globals.VIEW_OBSTRUCTING_CELLS)]
 	
 	var cell_position : Variant = find_cell_in_axis(first_cell, last_cell, conditions)
-	
 	if cell_position == null:
 		cell_position = last_cell
 	if positive_axis:
@@ -195,12 +154,7 @@ func find_ground(player_position : Vector3i, cell_visible : bool = true) -> Vari
 	var first_axis_cell : Vector3i = limits["first_cell"]
 	var last_axis_cell : Vector3i = limits["last_cell"]
 	
-	var conditions : Dictionary = {"SELF" : Globals.EMPTY_CELL, "DOWN" : Globals.GROUND_CELLS}
-	
-	return find_cell_in_axis(first_axis_cell, last_axis_cell, conditions)
-
-func empty_at_position(cell_position : Vector3i) -> bool:
-	return get_cell_item(cell_position) == INVALID_CELL_ITEM
+	return find_cell_in_axis(first_axis_cell, last_axis_cell, Condition.ground_conditions())
 
 func is_cell_visible(cell_position : Vector3i) -> bool:
 	var axis_coords : Vector3i = get_axis_coords(cell_position)

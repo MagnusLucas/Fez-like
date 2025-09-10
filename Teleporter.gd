@@ -28,6 +28,22 @@ func check_position(delta : float) -> void:
 		if new_cells.is_empty():
 			return # Already tried preventing it
 		if old_cells.is_empty():
+			var directional := _get_directional(player_position, new_cells)
+			
+			if directional.size() == 1:
+				var new_cell = directional[0]
+				match new_cell:
+					Vector3i.UP:
+						# Tp to front
+						var condition = Condition.new(Vector3i.UP, Globals.EMPTY_CELL)
+						if condition.evaluate(map, player_position, player.basis):
+							var proper_cell_conditions : Array[Condition] = [
+								Condition.new("SELF", Globals.EMPTY_CELL, true),
+								Condition.new("UP", Globals.EMPTY_CELL, true)
+							]
+							var proper_cell = map.find_cell(player_position, proper_cell_conditions)
+							if proper_cell != null:
+								move_to_cell(proper_cell)
 			# Handle only new - 
 			# 	Going UP
 			# 	UPRIGHT
@@ -47,6 +63,16 @@ func check_position(delta : float) -> void:
 		if old_cells.is_empty():
 			# Check if ground
 			# If no ground look for ground
+			# TODO: DONT FORGET YOU MIGHT BE STANDING ON MULTIPLE TILES
+			var condition = Condition.new(Vector3i.DOWN, Globals.GROUND_CELLS)
+			if !condition.evaluate(map, player_position, player.basis):
+				var proper_cell_conditions : Array[Condition] = [
+						Condition.new("SELF", Globals.EMPTY_CELL, bool(player_visibility)), 
+						Condition.new("DOWN", Globals.GROUND_CELLS)
+				]
+				var proper_cell = map.find_cell(player_position, proper_cell_conditions)
+				if proper_cell != null:
+					move_to_cell(proper_cell)
 			return
 		_handle_exiting_cells(future_cells, player_position, future_player_visibility)
 	else:
@@ -59,11 +85,20 @@ func align_in_cell(axis : Vector3) -> void:
 	var fixed_cell_offset : Vector3 = in_cell_offset * (Vector3.ONE - abs(axis))
 	player.position = map.map_to_local(cell_position) + fixed_cell_offset
 
+
 func move_to_cell(destination : Vector3i) -> void:
 	print("TP!")
 	var cell_position = map.local_to_map(player.position)
 	var in_cell_offset : Vector3 = player.position - map.map_to_local(cell_position)
 	player.position = map.map_to_local(destination) + in_cell_offset
+
+
+func _get_directional(position : Vector3i, cells : Array[Vector3i]) -> Array[Vector3i]:
+	var result : Array[Vector3i]
+	for cell in cells:
+		result.append(cell - position)
+	return result
+
 
 func _get_inhabitet_cells_at_position(position : Vector3) -> Array[Vector3i]:
 	var collision : PointCollision = player.collision
@@ -170,6 +205,7 @@ func _is_player_visibile(inhabited_cells : Array[Vector3i]) -> Variant:
 	#else:
 		#return
 
+
 func _handle_exiting_cells(future_player_cells : Array[Vector3i], future_player_position : Vector3i,
 		future_player_visibility : Variant) -> void:
 	# Might have lost ground
@@ -193,9 +229,6 @@ func _handle_exiting_cells(future_player_cells : Array[Vector3i], future_player_
 			move_to_cell(Vector3i(ground.round()) - (cell - future_player_position))
 			return
 
-func build_cell_conditions(visibility : Dictionary, cell_type : Dictionary) -> Dictionary:
-	# { "SELF" : {"tile_type" : Globals.EMPTY, "visibility" : true}, "RIGHT" : ...}
-	return {}
 
 func _visibility_change(old_cells : Array[Vector3i], new_cells : Array[Vector3i]) -> float:
 	var old_visibility := 0.0

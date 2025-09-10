@@ -3,13 +3,13 @@ class_name Condition
 
 var verbal_direction : String
 var direction : Vector3i
-var tile_types : Dictionary
+var cell_types : Dictionary
 var is_visible : bool
 var is_visibility_important : bool
 
-func _init(local_direction : Variant, correct_tile_types : Dictionary,
+func _init(local_direction : Variant, correct_cell_types : Dictionary,
 		should_be_visible : Variant = null) -> void:
-	tile_types = correct_tile_types
+	cell_types = correct_cell_types
 	if local_direction is String:
 		verbal_direction = local_direction
 		direction = str_to_vec(verbal_direction)
@@ -30,18 +30,27 @@ func evaluate(map : Map, cell_position : Vector3i, camera_basis : Basis) -> bool
 		if map.is_cell_visible(checked_cell) != is_visible:
 			return false
 	var cell_id = map.get_cell_item(checked_cell)
-	if !tile_types.has(cell_id):
+	
+	if cell_id == -1:
+		return cell_types.has("EMPTY")
+	
+	var cell_name = map.mesh_library.get_item_name(cell_id)
+	if !cell_types.has(cell_name):
 		return false
 	return true
 
 func _to_string() -> String:
-	var result := verbal_direction + " is one of " + str(tile_types.keys())
+	var result := verbal_direction + " is one of " + str(cell_types.keys())
 	if is_visibility_important:
 		result += " and "
 		if !is_visible:
 			result += "not "
 		result += "visible"
 	return result
+
+static func ground_conditions() -> Array[Condition]:
+	return [Condition.new("SELF", Globals.EMPTY_CELL),
+			Condition.new("DOWN", Globals.GROUND_CELLS)]
 
 static func str_to_vec(string : String) -> Vector3i:
 	var result = Vector3i.ZERO
