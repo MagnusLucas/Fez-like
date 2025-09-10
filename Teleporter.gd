@@ -27,11 +27,26 @@ func check_position(delta : float) -> void:
 	if visibility_change < 0: # Getting less visible
 		if new_cells.is_empty():
 			return # Already tried preventing it
-		pass
+		if old_cells.is_empty():
+			# Handle only new - 
+			# 	Going UP
+			# 	UPRIGHT
+			# 	RIGHT
+			# 	DOWNRIGHT
+			# 	DOWN
+			pass
+		else:
+			# Treat as current - old -> future
+			if _visibility_change(Globals.subtract_arrays(current_cells, old_cells), future_cells) < 0:
+				pass
+			else:
+				pass
 	
 	elif visibility_change == 0:
 		# Keep on ground
 		if old_cells.is_empty():
+			# Check if ground
+			# If no ground look for ground
 			return
 		_handle_exiting_cells(future_cells, player_position, future_player_visibility)
 	else:
@@ -177,6 +192,10 @@ func _handle_exiting_cells(future_player_cells : Array[Vector3i], future_player_
 		if ground != null:
 			move_to_cell(Vector3i(ground.round()) - (cell - future_player_position))
 			return
+
+func build_cell_conditions(visibility : Dictionary, cell_type : Dictionary) -> Dictionary:
+	# { "SELF" : {"tile_type" : Globals.EMPTY, "visibility" : true}, "RIGHT" : ...}
+	return {}
 
 func _visibility_change(old_cells : Array[Vector3i], new_cells : Array[Vector3i]) -> float:
 	var old_visibility := 0.0
