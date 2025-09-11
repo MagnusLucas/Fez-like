@@ -1,21 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://v4p51eilya4e"]
+[gd_scene load_steps=3 format=3 uid="uid://v4p51eilya4e"]
 
-[ext_resource type="Texture2D" uid="uid://b3us7t04us80y" path="res://Assets/Environment/tex_door.png" id="1_ba8gm"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pcong"]
-transparency = 1
-albedo_texture = ExtResource("1_ba8gm")
-billboard_mode = 1
-
-[sub_resource type="QuadMesh" id="QuadMesh_v6xrn"]
-material = SubResource("StandardMaterial3D_pcong")
+[ext_resource type="ArrayMesh" uid="uid://b5blrp07rxkil" path="res://Assets/Environment/mesh_door_wood.tres" id="1_d4d4v"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0phs7"]
+size = Vector3(1, 1.99841, 1)
 
 [node name="Door" type="Area3D"]
 
 [node name="Door" type="MeshInstance3D" parent="."]
-mesh = SubResource("QuadMesh_v6xrn")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = ExtResource("1_d4d4v")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.499207, 0)
 shape = SubResource("BoxShape3D_0phs7")

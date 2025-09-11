@@ -1,0 +1,42 @@
+[gd_resource type="ArrayMesh" load_steps=5 format=4 uid="uid://b5blrp07rxkil"]
+
+[ext_resource type="Texture2D" uid="uid://d2suvlh0rwh5e" path="res://Assets/Environment/tex_door_wood.png" id="1_lgb2m"]
+[ext_resource type="Texture2D" uid="uid://b72sreml7ruwo" path="res://Assets/Environment/m_door_wood_door_wood_96.png" id="1_ni7d2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ptmxn"]
+resource_name = "m_door"
+albedo_texture = ExtResource("1_lgb2m")
+emission_texture = ExtResource("1_ni7d2")
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7fqud"]
+_surfaces = [{
+"aabb": AABB(-0.0625, 0, -0.5, 0.125, 2, 1),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAACAAEAAwAEAAEABQAAAAIAAwAAAAUABAAGAAIABQACAAYAAwAHAAQAAwAFAAcABwAGAAQABwAFAAYA"),
+"name": "m_door",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAP//AAAAAAAA/////wAAAAAAAAAAAAD/////AAAAAP//AAD//wAA////////AAD//wAAAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[resource]
+resource_name = "m_door_wood_Cube"
+_surfaces = [{
+"aabb": AABB(-0.0625, 0, -0.5, 0.125, 2, 1),
+"attribute_data": PackedByteArray("///w8DiOAAD//wAAOI7w8DiO////fw4POI4OD/9/////f///OA4OD/9/Dg84Dv//OA7//wAADg84Dg4PAAD//ziO8PD/////OI7/////8PD/fw4POA4AAP9/AAA4Dg4P"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_ptmxn"),
+"name": "m_door",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAP//AAD/vwAA//////+/AAAAAAAA/78AAAAAAAD///////8AAP//AAD//wAA/////wAAAAD/////AAAAAP+//////////7//////AAD/v///AAD///+///8AAP//AIAAAP////8AgP///////wCAAAAAAP//AIAAAAAAAABU1f//AAD//1TV//8AAAAAVNUAAAAA//9U1f////8AAFTVAAD/////VNUAAP//AABU1f///////1TV/3////9/////f////3////9/////f////3////9/////fwAA/38AAP9/AAD/fwAA/3////9/////f////3///6oqVNWqKlTVqipU1aoqVNVU1aoqVNWqKlTVqipU1aoq")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_7fqud")
