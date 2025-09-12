@@ -23,3 +23,9 @@ func subtract_arrays(minuend : Array, subtrahend : Array) -> Array:
 	for item in subtrahend:
 		result.erase(item)
 	return result
+
+func subtract_vector_from_each(minuend : Array[Vector3i], subtrahend : Vector3i) -> Array:
+	var result = minuend.duplicate()
+	for item in range(result.size()):
+		result[item] -= subtrahend
+	return result

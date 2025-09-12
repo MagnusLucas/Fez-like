@@ -48,9 +48,12 @@ func _to_string() -> String:
 		result += "visible"
 	return result
 
-static func ground_conditions() -> Array[Condition]:
+static func GROUND_CONDITIONS() -> Array[Condition]:
 	return [Condition.new("SELF", Globals.EMPTY_CELL),
 			Condition.new("DOWN", Globals.GROUND_CELLS)]
+
+static func EMPTY() -> Array[Condition]:
+	return [Condition.new("SELF", Globals.EMPTY_CELL)]
 
 static func str_to_vec(string : String) -> Vector3i:
 	var result = Vector3i.ZERO

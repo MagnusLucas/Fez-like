@@ -20,7 +20,7 @@ var used_aabb : AABB
 func _ready() -> void:
 	_instantiate_scripted_scenes()
 	used_aabb = get_used_AABB()
-	used_aabb.position -= Vector3.ONE # Fix so that the player can never bump their head
+	used_aabb.position -= Vector3.ONE # Fix so that the player can always tp visible/invisible
 	used_aabb.size += Vector3.ONE * 2 # Remove to allow it
 	calculate_axis_visibility(Basis.IDENTITY)
 	if camera_follows_player:
@@ -87,8 +87,8 @@ func calculate_axis_visibility(new_basis : Basis) -> void:
 func get_axis_coords(point_on_axis : Vector3i, axis : Vector3i = camera_origin.get_camera_normal()) -> Vector3i:
 	return point_on_axis * (Vector3i.ONE - abs(axis))
 
-func is_cell_walkable(cell_position : Vector3i) -> bool:
-	return neighbourhood_conditions_fulfilled(cell_position, Condition.ground_conditions())
+func is_cell_on_ground(cell_position : Vector3i) -> bool:
+	return neighbourhood_conditions_fulfilled(cell_position, Condition.GROUND_CONDITIONS())
 
 func neighbourhood_conditions_fulfilled(cell_position : Vector3i, 
 		conditions : Array[Condition]) -> bool:
@@ -156,7 +156,7 @@ func find_ground(player_position : Vector3i, cell_visible : bool = true) -> Vari
 	var first_axis_cell : Vector3i = limits["first_cell"]
 	var last_axis_cell : Vector3i = limits["last_cell"]
 	
-	return find_cell_in_axis(first_axis_cell, last_axis_cell, Condition.ground_conditions())
+	return find_cell_in_axis(first_axis_cell, last_axis_cell, Condition.GROUND_CONDITIONS())
 
 func is_cell_visible(cell_position : Vector3i) -> bool:
 	var axis_coords : Vector3i = get_axis_coords(cell_position)
@@ -164,3 +164,6 @@ func is_cell_visible(cell_position : Vector3i) -> bool:
 		return true
 	var visible_aabb : AABB = visible_cells[axis_coords]
 	return visible_aabb.has_point(cell_position)
+
+func is_cell_empty(cell_position : Vector3i) -> bool:
+	return neighbourhood_conditions_fulfilled(cell_position, Condition.EMPTY())
