@@ -21,8 +21,7 @@ func check_position(delta : float) -> void:
 	var player_position : Vector3i = map.local_to_map(player.position)
 	
 	if visibility_change < 0: # Getting less visible
-		pass
-		#_handle_hiding(new_cells, old_cells, player_position, current_cells, future_cells)
+		_handle_hiding(current_cells, new_cells, player_position)
 	elif visibility_change == 0:
 		_handle_no_visibility_change(current_cells, new_cells, player_position)
 	else:
@@ -76,39 +75,95 @@ func _is_player_visibile(inhabited_cells : Array[Vector3i]) -> Variant:
 			return null
 	return visibility
 
-func _handle_hiding(new_cells, old_cells, player_position, current_cells, future_cells) -> void:
-	if new_cells.is_empty():
-		return # Already tried preventing it
-	if old_cells.is_empty():
-		var directional := _get_directional(player_position, new_cells)
-		
-		if directional.size() == 1:
-			var new_cell = directional[0]
-			match new_cell:
+func _handle_hiding(current_cells : Array[Vector3i],
+		new_cells : Array[Vector3i], player_position : Vector3i) -> void:
+	match new_cells.size():
+		1:
+			var direction : Vector3i = new_cells[0] - player_position
+			print("Simple hiding ", Condition.vec_to_string(direction))
+			match direction:
 				Vector3i.UP:
-					# Tp to front
-					var condition = Condition.new(Vector3i.UP, Globals.EMPTY_CELL)
-					if condition.evaluate(map, player_position, player.basis):
-						var proper_cell_conditions : Array[Condition] = [
+					if !map.is_cell_empty(player_position + direction):
+						var conditions : Array[Condition] = [
+							Condition.new("SELF", Globals.EMPTY_CELL, map.is_cell_visible(player_position)),
+							Condition.new("UP", Globals.EMPTY_CELL)]
+						var correct_cell = map.find_cell(player_position, conditions)
+						move_to_cell(correct_cell)
+				Vector3i.DOWN:
+					if map.is_cell_empty(player_position + direction):
+						var conditions : Array[Condition] = [
 							Condition.new("SELF", Globals.EMPTY_CELL, true),
-							Condition.new("UP", Globals.EMPTY_CELL, true)
+							Condition.new("DOWN", Globals.GROUND_CELLS)]
+						var correct_cell = map.find_cell(player_position, conditions)
+						if correct_cell != null:
+							move_to_cell(correct_cell)
+						else:
+							conditions = [
+							Condition.new("SELF", Globals.EMPTY_CELL, true),
+							Condition.new("DOWN", Globals.EMPTY_CELL, true)]
+							correct_cell = map.find_cell(player_position, conditions)
+							if correct_cell != null:
+								move_to_cell(correct_cell)
+				Vector3i.LEFT, Vector3i.RIGHT:
+					if !map.is_cell_empty(player_position + direction):
+						var conditions : Array[Condition] = [
+							Condition.new("SELF", Globals.EMPTY_CELL, true),
+							Condition.new(direction, Globals.EMPTY_CELL, true)]
+						var correct_cell = map.find_cell(player_position, conditions)
+						if correct_cell != null:
+							move_to_cell(correct_cell)
+						else:
+							conditions = [
+								Condition.new("SELF", Globals.EMPTY_CELL, true),
+								Condition.new(direction, Globals.VIEW_OBSTRUCTING_CELLS)]
+							correct_cell = map.find_cell(player_position, conditions)
+							move_to_cell(correct_cell)
+		2:
+			var directional_to_new : Array[Vector3i] = Globals.subtract_vector_from_each(new_cells, player_position)
+			var direction : Vector3i
+			if directional_to_new[0].length_squared() == 1:
+				direction = directional_to_new[0]
+			else:
+				direction = directional_to_new[1]
+			print("Two-cell hiding ", Condition.vec_to_string(direction))
+			match direction:
+				Vector3i.UP:
+					var conditions : Array[Condition] = [
+						Condition.new(current_cells[0] - player_position, Globals.EMPTY_CELL, map.is_cell_visible(current_cells[0])),
+						Condition.new(current_cells[1] - player_position, Globals.EMPTY_CELL, map.is_cell_visible(current_cells[1])),
+						Condition.new(new_cells[0] - player_position, Globals.EMPTY_CELL),
+						Condition.new(new_cells[1] - player_position, Globals.EMPTY_CELL)
 						]
-						var proper_cell = map.find_cell(player_position, proper_cell_conditions)
-						if proper_cell != null:
-							move_to_cell(proper_cell)
-		# Handle only new - 
-		# 	Going UP
-		# 	UPRIGHT
-		# 	RIGHT
-		# 	DOWNRIGHT
-		# 	DOWN
-		pass
-	else:
-		# Treat as current - old -> future
-		if _visibility_change(Globals.subtract_arrays(current_cells, old_cells), future_cells) < 0:
-			pass
-		else:
-			pass
+					var correct_cell = map.find_cell(player_position, conditions)
+					# Check if the player is becoming fully invisible after tp
+					if correct_cell != null:
+						var future_cells : Array[Vector3i] = Globals.subtract_vector_from_each(directional_to_new, -correct_cell)
+						future_cells += Globals.subtract_vector_from_each(current_cells, player_position - correct_cell)
+						if _is_player_visibile(future_cells) != false:
+							move_to_cell(correct_cell)
+				#Vector3i.DOWN:
+					#if map.is_cell_empty(new_cells[0]) and map.is_cell_empty(new_cells[1]):
+						#var conditions : Array[Condition] = [
+							#Condition.new(current_cells[0] - player_position, Globals.EMPTY_CELL, map.is_cell_visible(current_cells[0])),
+							#Condition.new(current_cells[1] - player_position, Globals.EMPTY_CELL, map.is_cell_visible(current_cells[1])),
+							#Condition.new(new_cells[0] - player_position, Globals.GROUND_CELLS)
+							#]
+						#var correct_cell = map.find_cell(player_position, conditions)
+						#if correct_cell != null:
+							#move_to_cell(correct_cell)
+						#else:
+							#conditions = [
+							#Condition.new(current_cells[0] - player_position, Globals.EMPTY_CELL, map.is_cell_visible(current_cells[0])),
+							#Condition.new(current_cells[1] - player_position, Globals.EMPTY_CELL, map.is_cell_visible(current_cells[1])),
+							#Condition.new(new_cells[1] - player_position, Globals.GROUND_CELLS)
+							#]
+							#correct_cell = map.find_cell(player_position, conditions)
+							#if correct_cell != null:
+								#move_to_cell(correct_cell)
+		3:
+			print("This never happens.")
+			# This happens, like, never.
+	return
 
 func _handle_showing() -> void:
 	return
@@ -123,7 +178,6 @@ func _handle_no_visibility_change(current_cells : Array[Vector3i],
 	match new_cells.size():
 		1:
 			var direction : Vector3i = new_cells[0] - player_position
-			print("Simple ", Condition.vec_to_string(direction))
 			match direction:
 				Vector3i.UP:
 					if !map.is_cell_empty(player_position + direction):
@@ -155,7 +209,6 @@ func _handle_no_visibility_change(current_cells : Array[Vector3i],
 				direction = directional_to_new[0]
 			else:
 				direction = directional_to_new[1]
-			print("Two-cell ", Condition.vec_to_string(direction))
 			match direction:
 				Vector3i.UP, Vector3i.LEFT, Vector3i.RIGHT:
 					if !map.is_cell_empty(new_cells[0]) or !map.is_cell_empty(new_cells[1]):
@@ -189,7 +242,8 @@ func _handle_no_visibility_change(current_cells : Array[Vector3i],
 								move_to_cell(correct_cell)
 				
 		3:
-			pass
+			print("This never happens.")
+			# This happens, like, never.
 	return
 
 func _visibility_change(old_cells : Array[Vector3i], new_cells : Array[Vector3i]) -> float:
