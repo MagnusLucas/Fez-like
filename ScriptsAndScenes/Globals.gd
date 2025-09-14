@@ -1,3 +1,31 @@
 extends Node
 
-const VIEW_OBSTRUCTING_CELLS = ["Wall", "Wall2", "Wall3", "Wall4", "Wall5"]
+const VIEW_OBSTRUCTING_CELLS = {
+	"Wall" : true,
+	"Wall2" : true,
+	"Wall3" : true,
+	"Wall4" : true,
+	"Wall5" : true,
+}
+const GROUND_CELLS = {
+	"Wall" : true,
+	"Wall4" : true,
+	"Wall5" : true,
+}
+
+const EMPTY_CELL = {
+	"EMPTY" : true,
+	"Vines1" : true,
+}
+
+func subtract_arrays(minuend : Array, subtrahend : Array) -> Array:
+	var result = minuend.duplicate()
+	for item in subtrahend:
+		result.erase(item)
+	return result
+
+func subtract_vector_from_each(minuend : Array[Vector3i], subtrahend : Vector3i) -> Array:
+	var result = minuend.duplicate()
+	for item in range(result.size()):
+		result[item] -= subtrahend
+	return result
