@@ -22,7 +22,6 @@ _surfaces = [{
 blend_shape_mode = 0
 
 [resource]
-resource_name = "m_door_wood_Cube"
 _surfaces = [{
 "aabb": AABB(-0.0625, 0, -0.5, 0.125, 2, 1),
 "attribute_data": PackedByteArray("///w8DiOAAD//wAAOI7w8DiO////fw4POI4OD/9/////f///OA4OD/9/Dg84Dv//OA7//wAADg84Dg4PAAD//ziO8PD/////OI7/////8PD/fw4POA4AAP9/AAA4Dg4P"),
