@@ -35,6 +35,9 @@ func tween_y_rotation(angle_radians : float) -> void:
 	
 	tween.finished.connect(func() -> void: 
 		can_rotate = true
+		basis.x.round()
+		basis.y.round()
+		basis.z.round()
 		camera_rotation_finished.emit()
 	)
 
