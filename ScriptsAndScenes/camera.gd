@@ -9,6 +9,11 @@ var player : Player = null
 signal camera_rotation_finished()
 signal camera_rotation_started(basis : Basis)
 
+const CAMERA_ORIGIN = preload("res://ScriptsAndScenes/camera_origin.tscn")
+
+static func instantiate() -> CameraOrigin:
+	return CAMERA_ORIGIN.instantiate()
+
 func _process(_delta: float) -> void:
 	if player:
 		position = player.position

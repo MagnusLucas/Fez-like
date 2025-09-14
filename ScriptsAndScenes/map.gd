@@ -12,12 +12,19 @@ const SCRIPTED_SCENES : Dictionary[String, Resource] = {
 }
 
 @export var camera_follows_player : bool = true
-@onready var camera_origin: CameraOrigin = $CameraOrigin
+var camera_origin: CameraOrigin
 
 var visible_cells : Dictionary
 var used_aabb : AABB
 
 func _ready() -> void:
+	var cam = find_child("CameraOrigin")
+	if cam != null:
+		camera_origin = cam
+	else:
+		camera_origin = CameraOrigin.instantiate()
+		add_child(camera_origin)
+	
 	_instantiate_scripted_scenes()
 	used_aabb = get_used_AABB()
 	used_aabb.position -= Vector3.ONE # Fix so that the player can always tp visible/invisible

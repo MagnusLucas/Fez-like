@@ -13,3 +13,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
 		$CanvasLayer/PausePanel.show()
 		get_tree().paused = true
+
+func finish_level() -> void:
+	$CanvasLayer/FinishPanel.show()
+	get_tree().paused = true

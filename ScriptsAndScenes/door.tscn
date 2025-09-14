@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://v4p51eilya4e"]
+[gd_scene load_steps=4 format=3 uid="uid://v4p51eilya4e"]
 
+[ext_resource type="Script" uid="uid://do01y7gnm4jxt" path="res://ScriptsAndScenes/door.gd" id="1_0xbbw"]
 [ext_resource type="ArrayMesh" uid="uid://beeei2royp4yi" path="res://Assets/Environment/mesh_door_wood.tres" id="1_d4d4v"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0phs7"]
 size = Vector3(1, 1.99841, 1)
 
 [node name="Door" type="Area3D"]
+script = ExtResource("1_0xbbw")
 
 [node name="Door" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -14,3 +16,9 @@ mesh = ExtResource("1_d4d4v")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.499207, 0)
 shape = SubResource("BoxShape3D_0phs7")
+
+[node name="FinishLvlDelay" type="Timer" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="FinishLvlDelay" to="." method="_on_finish_lvl"]

@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://cark5yx3i7eof"]
 
 [ext_resource type="Script" uid="uid://b4ngoy5bcvfsb" path="res://ScriptsAndScenes/pick_level.gd" id="1_ard4b"]
-[ext_resource type="PackedScene" uid="uid://b3lvivi6ooeb7" path="res://ScriptsAndScenes/Maps/lvl_1.tscn" id="2_33sbu"]
-[ext_resource type="PackedScene" uid="uid://clpoi7ggf0pur" path="res://ScriptsAndScenes/Maps/map.tscn" id="3_611xn"]
+[ext_resource type="PackedScene" uid="uid://il35stenicx1" path="res://ScriptsAndScenes/Maps/lvl_1_mag.tscn" id="2_611xn"]
+[ext_resource type="PackedScene" uid="uid://b5rb358lk6hpf" path="res://ScriptsAndScenes/Maps/lvl_2_mag.tscn" id="3_611xn"]
 [ext_resource type="PackedScene" uid="uid://dj82xvj8n5tju" path="res://ScriptsAndScenes/Maps/bigger_map.tscn" id="4_kdlt3"]
 
 [node name="Menu" type="Node"]
@@ -60,19 +60,19 @@ custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 text = "1"
 script = ExtResource("1_ard4b")
-level = ExtResource("2_33sbu")
+level = ExtResource("2_611xn")
 
 [node name="Button2" type="Button" parent="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-text = "1"
+text = "2"
 script = ExtResource("1_ard4b")
 level = ExtResource("3_611xn")
 
 [node name="Button3" type="Button" parent="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-text = "1"
+text = "3"
 script = ExtResource("1_ard4b")
 level = ExtResource("4_kdlt3")
 
