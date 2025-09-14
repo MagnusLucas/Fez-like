@@ -1,13 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://cark5yx3i7eof"]
+[gd_scene load_steps=6 format=3 uid="uid://cark5yx3i7eof"]
 
-[ext_resource type="Script" uid="uid://b4ngoy5bcvfsb" path="res://ScriptsAndScenes/pick_level.gd" id="1_ard4b"]
+[ext_resource type="PackedScene" uid="uid://biud0s3t8junj" path="res://ScriptsAndScenes/sky_node_2d.tscn" id="1_ard4b"]
 [ext_resource type="PackedScene" uid="uid://il35stenicx1" path="res://ScriptsAndScenes/Maps/lvl_1_mag.tscn" id="2_611xn"]
+[ext_resource type="Script" uid="uid://b4ngoy5bcvfsb" path="res://ScriptsAndScenes/pick_level.gd" id="2_c8f5b"]
 [ext_resource type="PackedScene" uid="uid://bdig1s5ulxppw" path="res://ScriptsAndScenes/Maps/lvl_3_mag.tscn" id="2_kdlt3"]
 [ext_resource type="PackedScene" uid="uid://b5rb358lk6hpf" path="res://ScriptsAndScenes/Maps/lvl_2_mag.tscn" id="3_611xn"]
 
 [node name="Menu" type="Node"]
 
 [node name="Background" type="CanvasLayer" parent="."]
+
+[node name="SkyNode2D" parent="Background" instance=ExtResource("1_ard4b")]
 
 [node name="Controls" type="CanvasLayer" parent="."]
 
@@ -59,21 +62,21 @@ theme_override_constants/separation = 10
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 text = "1"
-script = ExtResource("1_ard4b")
+script = ExtResource("2_c8f5b")
 level = ExtResource("2_kdlt3")
 
 [node name="Button2" type="Button" parent="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 text = "2"
-script = ExtResource("1_ard4b")
+script = ExtResource("2_c8f5b")
 level = ExtResource("3_611xn")
 
 [node name="Button3" type="Button" parent="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 text = "3"
-script = ExtResource("1_ard4b")
+script = ExtResource("2_c8f5b")
 level = ExtResource("2_611xn")
 
 [connection signal="pressed" from="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels/Button" to="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels/Button" method="_on_pressed"]

@@ -29,7 +29,7 @@ func _ready() -> void:
 	
 	_instantiate_scripted_scenes()
 	used_aabb = get_used_AABB()
-	const MAP_GROW_FACTOR : int = 1
+	const MAP_GROW_FACTOR : int = 3
 	used_aabb.position -= Vector3.ONE * MAP_GROW_FACTOR # Fix so that the player can always tp visible/invisible
 	used_aabb.size += Vector3.ONE * 2 * MAP_GROW_FACTOR # Set MAP_GROW_FACTOR to 0 to allow it
 	calculate_axis_visibility(Basis.IDENTITY)

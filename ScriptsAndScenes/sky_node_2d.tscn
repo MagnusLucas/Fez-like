@@ -1,9 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://biud0s3t8junj"]
+[gd_scene load_steps=3 format=3 uid="uid://biud0s3t8junj"]
 
 [ext_resource type="Texture2D" uid="uid://cjcienswd1oqp" path="res://Assets/Environment/2d_sky_bg.png" id="1_dpct8"]
 [ext_resource type="Script" uid="uid://cetj33wf6wo5b" path="res://ScriptsAndScenes/bg_node_timer.gd" id="2_7kt26"]
-[ext_resource type="PackedScene" uid="uid://y17ika24w0vj" path="res://ScriptsAndScenes/cloud_sprite_2d.tscn" id="3_uu7ar"]
-[ext_resource type="Texture2D" uid="uid://dn6rhn8qcc3wq" path="res://Assets/Environment/2d_cloud_big.png" id="4_7kt26"]
 
 [node name="SkyNode2D" type="Node2D"]
 
@@ -24,12 +22,9 @@ position = Vector2(-100, 327)
 [node name="Marker2DStart" type="Marker2D" parent="."]
 position = Vector2(1300, 327)
 
-[node name="Timer2D" type="Timer" parent="Marker2DStart"]
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
 autostart = true
 script = ExtResource("2_7kt26")
 
-[node name="CloudSprite" parent="Marker2DStart" instance=ExtResource("3_uu7ar")]
-position = Vector2(-668, 18)
-texture = ExtResource("4_7kt26")
-
-[connection signal="timeout" from="Marker2DStart/Timer2D" to="Marker2DStart/Timer2D" method="_on_timeout"]
+[connection signal="timeout" from="Timer" to="Timer" method="_on_timeout"]
