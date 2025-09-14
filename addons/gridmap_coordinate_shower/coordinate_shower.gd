@@ -30,11 +30,11 @@ func _enter_tree() -> void:
 	spinbox = EditorInterface.get_base_control().get_node_or_null(GRIDMAP_LOCATION + SPINBOX_LOCATION)
 	
 	if spinbox == null:
-		spinbox = EditorInterface.get_base_control().find_child("GridMapEditor", true).get_node_or_null(SPINBOX_LOCATION)
+		spinbox = EditorInterface.get_base_control().find_child("GridMapEditor", true, false).get_node_or_null(SPINBOX_LOCATION)
 		
 		if spinbox == null:
 			spinbox = EditorInterface.get_base_control().find_child(
-				"GridMapEditor", true).find_child("SpinBox", true)
+				"GridMapEditor", true, false).find_child("SpinBox", true, false)
 		
 			if spinbox == null:
 				# Cry
