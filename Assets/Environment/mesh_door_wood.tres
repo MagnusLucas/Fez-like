@@ -1,12 +1,10 @@
-[gd_resource type="ArrayMesh" load_steps=5 format=4 uid="uid://b5blrp07rxkil"]
+[gd_resource type="ArrayMesh" load_steps=4 format=4 uid="uid://beeei2royp4yi"]
 
 [ext_resource type="Texture2D" uid="uid://d2suvlh0rwh5e" path="res://Assets/Environment/tex_door_wood.png" id="1_lgb2m"]
-[ext_resource type="Texture2D" uid="uid://b72sreml7ruwo" path="res://Assets/Environment/m_door_wood_door_wood_96.png" id="1_ni7d2"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ptmxn"]
 resource_name = "m_door"
 albedo_texture = ExtResource("1_lgb2m")
-emission_texture = ExtResource("1_ni7d2")
 texture_filter = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_7fqud"]

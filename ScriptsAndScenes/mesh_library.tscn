@@ -7,9 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://dsjelvy0rdras" path="res://Assets/Environment/tex_block_sand_w_grass_v1.png" id="5_bgj6p"]
 [ext_resource type="Texture2D" uid="uid://c1i2sppiu5bba" path="res://Assets/Environment/tex_block_sand_w_grass_v2.png" id="6_11i3v"]
 [ext_resource type="ArrayMesh" uid="uid://d1ahu6p7uffu0" path="res://Assets/Environment/mesh_vines.tres" id="7_bgj6p"]
-[ext_resource type="ArrayMesh" uid="uid://dj7dbbfjvmp4n" path="res://Assets/Environment/mesh_tree_small.tres" id="8_3ar72"]
+[ext_resource type="ArrayMesh" uid="uid://b2fqqj5ligraq" path="res://Assets/Environment/mesh_tree_small.tres" id="8_3ar72"]
 [ext_resource type="Texture2D" uid="uid://bt7sqbl4sov3u" path="res://Assets/Environment/tex_tree_sma_orange_512.png" id="9_d724q"]
-[ext_resource type="ArrayMesh" uid="uid://b5blrp07rxkil" path="res://Assets/Environment/mesh_door_wood.tres" id="10_1vh0i"]
+[ext_resource type="ArrayMesh" uid="uid://beeei2royp4yi" path="res://Assets/Environment/mesh_door_wood.tres" id="10_1vh0i"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jo043"]
 albedo_color = Color(0, 0, 0, 1)
