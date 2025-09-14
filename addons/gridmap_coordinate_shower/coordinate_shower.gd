@@ -5,7 +5,7 @@ const MAIN_SPLIT = "@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplit
 const BOTTOM_LOCATION = MAIN_SPLIT + "/@VBoxContainer@26/DockVSplitCenter/@EditorBottomPanel@7930"
 const GRIDMAP_LOCATION = BOTTOM_LOCATION + "/@VBoxContainer@7915/@GridMapEditor@21369"
 
-const SPINBOX_LOCATION = GRIDMAP_LOCATION + "/@HBoxContainer@21316/@SpinBox@21356"
+const SPINBOX_LOCATION = "/@HBoxContainer@21316/@SpinBox@21356"
 
 # But it's empty...
 const AXIS_POPUP_LOCATION = GRIDMAP_LOCATION + "/@HBoxContainer@21316/@MenuButton@21364"
@@ -13,7 +13,7 @@ const AXIS_POPUP_LOCATION = GRIDMAP_LOCATION + "/@HBoxContainer@21316/@MenuButto
 var gme : GridMapEditorPlugin
 var output_label : Label
 var viewport_3d : SubViewport
-var spinbox : SpinBox
+var spinbox : Variant
 
 
 func _enter_tree() -> void:
@@ -27,7 +27,18 @@ func _enter_tree() -> void:
 	viewport_3d.add_child(output_label)
 	
 	# For retrieving floor value of gridmap editor
-	spinbox = EditorInterface.get_base_control().get_node(SPINBOX_LOCATION)
+	spinbox = EditorInterface.get_base_control().get_node_or_null(GRIDMAP_LOCATION + SPINBOX_LOCATION)
+	
+	if spinbox == null:
+		spinbox = EditorInterface.get_base_control().find_child("GridMapEditor", true).get_node_or_null(SPINBOX_LOCATION)
+		
+		if spinbox == null:
+			spinbox = EditorInterface.get_base_control().find_child(
+				"GridMapEditor", true).find_child("SpinBox", true)
+		
+			if spinbox == null:
+				# Cry
+				pass
 
 
 func _process(delta: float) -> void:
