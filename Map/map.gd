@@ -116,8 +116,7 @@ func find_cell(cell_in_axis : Vector3i, conditions : Array[Condition]) -> Varian
 
 func get_iteration_limits(cell_in_axis : Vector3i, axis : Vector3 = camera_origin.get_camera_normal()) -> Dictionary:
 	var axis_coordinates = (Vector3.ONE - abs(axis)) * Vector3(cell_in_axis)
-	var positive_axis : bool = axis == abs(axis) 
-	
+	var positive_axis : bool = axis.round() == abs(axis.round())
 	# Making sure the iteration always goes along FORWARD of camera
 	var first_axis_cell : Vector3 = used_aabb.position * abs(axis) + axis_coordinates
 	var last_axis_cell : Vector3 = used_aabb.end * abs(axis) + axis_coordinates

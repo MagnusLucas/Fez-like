@@ -10,15 +10,34 @@ func _init(current_map : Map, parent_player : Player) -> void:
 
 func check_position(delta : float) -> void:
 	var velocity : Vector3 = player.velocity
+	var local_velocity : Vector3 = velocity * player.basis
+	
+	var global_x_velocity : Vector3 = local_velocity * Vector3(1, 0, 0) * player.basis.inverse()
+	
 	var current_cells := _get_inhabitet_cells_at_position(player.position)
-	var future_cells := _get_inhabitet_cells_at_position(player.position + velocity * delta)
+	var future_cells := _get_inhabitet_cells_at_position(player.position + global_x_velocity * delta)
 	var new_cells : Array[Vector3i] = Globals.subtract_arrays(future_cells, current_cells)
+	
+	var visibility_change : float
+	var player_position : Vector3i
+	if !new_cells.is_empty():
+		visibility_change = _visibility_change(current_cells, future_cells)
+		player_position = map.local_to_map(player.position)
+		
+		if visibility_change < 0: # Getting less visible
+			_handle_hiding(current_cells, new_cells, player_position)
+		elif visibility_change == 0:
+			_handle_no_visibility_change(current_cells, new_cells, player_position)
+		
+	current_cells = _get_inhabitet_cells_at_position(player.position + global_x_velocity * delta)
+	future_cells = _get_inhabitet_cells_at_position(player.position + velocity * delta)
+	new_cells = Globals.subtract_arrays(future_cells, current_cells)
 	
 	if new_cells.is_empty():
 		return
 	
-	var visibility_change : float = _visibility_change(current_cells, future_cells)
-	var player_position : Vector3i = map.local_to_map(player.position)
+	visibility_change = _visibility_change(current_cells, future_cells)
+	player_position = map.local_to_map(player.position)
 	
 	if visibility_change < 0: # Getting less visible
 		_handle_hiding(current_cells, new_cells, player_position)
@@ -81,7 +100,7 @@ func _handle_hiding(current_cells : Array[Vector3i],
 		2:
 			_handle_hiding_two_new(current_cells, new_cells, player_position)
 		3:
-			_handle_hiding_three_new(new_cells, player_position)
+			print_debug("There's 3 new cells, this should be impossible.")
 	return
 
 func _handle_hiding_one_new(new_cell : Vector3i, 
@@ -184,25 +203,6 @@ func _handle_hiding_two_new(current_cells : Array[Vector3i],
 						Globals.GROUND_CELLS))
 					move_if_possible(player_position, conditions)
 
-func _handle_hiding_three_new(new_cells : Array[Vector3i],
-		player_position : Vector3i) -> void:
-	var direction : Vector3i = _get_new_direction(new_cells, player_position)
-	var direction_local := Vector3i(Vector3(direction) * player.basis)
-	print("Hiding ", Condition.vec_to_string(direction_local))
-	var current_conditions : Array[Condition] = _get_current_conditions(
-			[player_position], player_position)
-	match Condition.vec_to_string(direction_local):
-		"LEFTUP", "RIGHTUP":
-			var conditions : Array[Condition] = current_conditions
-			for cell in new_cells:
-				conditions.append(Condition.new(
-						to_local(cell - player_position),
-						Globals.EMPTY_CELL
-				))
-			move_to_cell(map.find_cell(player_position, conditions))
-		"LEFTDOWN", "RIGHTDOWN":
-			pass
-
 func _handle_no_visibility_change(current_cells : Array[Vector3i],
 		new_cells : Array[Vector3i], player_position : Vector3i) -> void:
 	# Keep on ground
@@ -215,7 +215,7 @@ func _handle_no_visibility_change(current_cells : Array[Vector3i],
 		2:
 			_handle_no_change_two_new(current_cells, new_cells, player_position)
 		3:
-			_handle_no_change_three_new(new_cells, player_position)
+			print_debug("There's 3 new cells, this should be impossible.")
 	return
 
 func _handle_no_change_one_new(
@@ -285,64 +285,6 @@ func _handle_no_change_two_new(current_cells : Array[Vector3i],
 						Condition.new(to_local(new_cells[1] - player_position),
 							Globals.GROUND_CELLS))
 					move_if_possible(player_position, conditions)
-
-func _handle_no_change_three_new(new_cells : Array[Vector3i],
-		player_position : Vector3i) -> void:
-	var direction : Vector3i = _get_new_direction(new_cells, player_position)
-	var direction_local := Vector3i(Vector3(direction) * player.basis)
-	var current_conditions : Array[Condition] = _get_current_conditions(
-			[player_position], player_position)
-	match Condition.vec_to_string(direction_local):
-		"LEFTUP", "RIGHTUP":
-			var conditions : Array[Condition] = current_conditions
-			for cell in new_cells:
-				conditions.append(Condition.new(
-						to_local(cell - player_position),
-						Globals.EMPTY_CELL
-				))
-			move_to_cell(map.find_cell(player_position, conditions))
-		"LEFTDOWN", "RIGHTDOWN":
-			var horizontal_local : Vector3i = direction_local * Vector3i(1, 0, 0)
-			var horizontal_global : Vector3i = to_global(horizontal_local)
-			var vertical_global : Vector3i = to_global(Vector3i.DOWN)
-			var potential_ground : Array[Vector3i] = Globals.subtract_arrays(
-				new_cells, [player_position + horizontal_global]
-			)
-			if _wont_collide(new_cells):
-				for cell in potential_ground:
-					var conditions : Array[Condition] = current_conditions
-					@warning_ignore("incompatible_ternary")
-					conditions.append(Condition.new(horizontal_local, 
-						Globals.EMPTY_CELL, 
-						true if map.is_cell_visible(player_position) else null))
-					conditions.append(Condition.new(
-						to_local(cell - player_position), Globals.GROUND_CELLS))
-					if move_if_possible(player_position, conditions):
-						return
-			# This handles the specific two cases that need teleporting
-			elif (map.is_cell_empty(player_position + vertical_global) and not 
-					map.is_cell_empty(player_position + horizontal_global)):
-				for cell in potential_ground:
-					var conditions : Array[Condition] = current_conditions
-					@warning_ignore("incompatible_ternary")
-					conditions.append(Condition.new(horizontal_local, 
-						Globals.EMPTY_CELL, 
-						true if map.is_cell_visible(player_position) else null))
-					conditions.append(Condition.new(
-						to_local(cell - player_position), Globals.GROUND_CELLS))
-					if move_if_possible(player_position, conditions):
-						return
-				var empty_conditions : Array[Condition] = current_conditions
-				for cell in new_cells:
-					empty_conditions.append(Condition.new(
-							to_local(cell - player_position),
-							Globals.EMPTY_CELL
-					))
-				# Leaving this for now, so I can maybe understand this bugh
-				# Sometime in the future...
-				if !move_if_possible(player_position, empty_conditions):
-					print(empty_conditions)
-				move_to_cell(map.find_cell(player_position, empty_conditions))
 
 func _visibility_change(old_cells : Array[Vector3i], 
 		new_cells : Array[Vector3i]) -> float:
