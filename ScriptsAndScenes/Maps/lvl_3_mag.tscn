@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdig1s5ulxppw"]
+
+[ext_resource type="MeshLibrary" uid="uid://dkjwbfrjn1hdo" path="res://MeshLib/mesh_library.tres" id="1_71aaj"]
+[ext_resource type="Script" uid="uid://b363upmfmhid" path="res://ScriptsAndScenes/map.gd" id="2_dbdqq"]
+
+[node name="Map" type="GridMap"]
+mesh_library = ExtResource("1_71aaj")
+cell_size = Vector3(1, 1, 1)
+data = {
+"cells": PackedInt32Array(65527, 0, 0, 131063, 0, 3, 65528, 65535, 0, 65529, 65535, 0, 65532, 65532, 0, 131070, 65535, 0, 131071, 65535, 0, 131072, 65534, 0, 262143, 65533, 0, 262142, 65533, 0, 327677, 65530, 0, 393210, 65530, 0, 393209, 65530, 0, 458745, 65530, 2)
+}
+script = ExtResource("2_dbdqq")
+metadata/_custom_type_script = "uid://b363upmfmhid"
+metadata/_editor_floor_ = Vector3(0, 6, 0)

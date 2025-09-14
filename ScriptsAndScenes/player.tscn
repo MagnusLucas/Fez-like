@@ -104,3 +104,8 @@ animation = &"idle"
 autoplay = "idle"
 frame = 2
 frame_progress = 0.238211
+
+[node name="DieDelay" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="DieDelay" to="." method="_on_die_delay_timeout"]

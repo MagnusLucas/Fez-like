@@ -17,6 +17,8 @@ var camera_origin: CameraOrigin
 var visible_cells : Dictionary
 var used_aabb : AABB
 
+var player_spawn_point : Vector3i
+
 func _ready() -> void:
 	var cam = find_child("CameraOrigin")
 	if cam != null:
@@ -27,8 +29,9 @@ func _ready() -> void:
 	
 	_instantiate_scripted_scenes()
 	used_aabb = get_used_AABB()
-	used_aabb.position -= Vector3.ONE # Fix so that the player can always tp visible/invisible
-	used_aabb.size += Vector3.ONE * 2 # Remove to allow it
+	const MAP_GROW_FACTOR : int = 1
+	used_aabb.position -= Vector3.ONE * MAP_GROW_FACTOR # Fix so that the player can always tp visible/invisible
+	used_aabb.size += Vector3.ONE * 2 * MAP_GROW_FACTOR # Set MAP_GROW_FACTOR to 0 to allow it
 	calculate_axis_visibility(Basis.IDENTITY)
 	if camera_follows_player:
 		var player : Player = find_child("Player", false, false)
@@ -47,6 +50,8 @@ func _instantiate_scripted_scenes() -> void:
 			var instance = SCRIPTED_SCENES[item_name].instantiate()
 			add_child(instance, true)
 			instance.position = map_to_local(cell_position)
+			if item_name == "Player":
+				player_spawn_point = cell_position
 			set_cell_item(cell_position, INVALID_CELL_ITEM)
 
 

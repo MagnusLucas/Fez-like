@@ -4,6 +4,7 @@ class_name Player
 const GRAVITY = 10
 const SPEED = 4
 const JUMP_STRENGTH = 5
+const DIE_DELAY := 1.0
 
 
 var can_move : bool = true
@@ -12,6 +13,7 @@ var teleporter : Teleporter
 
 @onready var sprite: AnimatedSprite3D = $AnimatedSprite3D
 @onready var collision: PointCollision = $CollisionShape3D
+@onready var die_delay_timer: Timer = $DieDelay
 
 
 func _ready() -> void:
@@ -31,6 +33,7 @@ func _move(delta: float) -> void:
 			velocity -= basis.y * GRAVITY * delta
 		teleporter.check_position(delta)
 	_update_facing_direction()
+	_handle_timer(delta)
 	move_and_slide()
 	_update_visibility()
 
@@ -45,6 +48,17 @@ func _handle_input() -> void:
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity += basis.y * JUMP_STRENGTH
 
+func _handle_timer(delta: float) -> void:
+	var was_in_borders : bool = _is_in_borders(position)
+	var is_in_borders : bool = _is_in_borders(position + velocity * delta)
+	if was_in_borders and !is_in_borders:
+		die_delay_timer.start(DIE_DELAY)
+	elif is_in_borders and !was_in_borders:
+		die_delay_timer.stop()
+
+func _is_in_borders(player_position : Vector3) -> bool:
+	var map_position : Vector3i = map.local_to_map(player_position)
+	return map.used_aabb.has_point(map_position)
 
 # Making the player face the right direction - to be optimized
 func _update_facing_direction() -> void:
@@ -97,3 +111,7 @@ func handle_camera_rotation_finished() -> void:
 	sprite.play()
 	
 	teleporter.align_in_cell(Vector3.FORWARD * basis)
+
+
+func _on_die_delay_timeout() -> void:
+	teleporter.move_to_cell(map.player_spawn_point)
