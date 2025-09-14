@@ -189,6 +189,19 @@ func _handle_hiding_three_new(new_cells : Array[Vector3i],
 	var direction : Vector3i = _get_new_direction(new_cells, player_position)
 	var direction_local := Vector3i(Vector3(direction) * player.basis)
 	print("Hiding ", Condition.vec_to_string(direction_local))
+	var current_conditions : Array[Condition] = _get_current_conditions(
+			[player_position], player_position)
+	match Condition.vec_to_string(direction_local):
+		"LEFTUP", "RIGHTUP":
+			var conditions : Array[Condition] = current_conditions
+			for cell in new_cells:
+				conditions.append(Condition.new(
+						to_local(cell - player_position),
+						Globals.EMPTY_CELL
+				))
+			move_to_cell(map.find_cell(player_position, conditions))
+		"LEFTDOWN", "RIGHTDOWN":
+			pass
 
 func _handle_no_visibility_change(current_cells : Array[Vector3i],
 		new_cells : Array[Vector3i], player_position : Vector3i) -> void:
