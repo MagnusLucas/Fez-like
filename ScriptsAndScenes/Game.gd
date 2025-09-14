@@ -1,0 +1,15 @@
+extends Node
+class_name Game
+
+const GAME = preload("res://ScriptsAndScenes/game.tscn")
+
+static func instantiate(gridmap : Map) -> Game:
+	var game : Game = GAME.instantiate()
+	var world_3d : CanvasLayer = game.find_child("3D")
+	world_3d.add_child(gridmap)
+	return game
+
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("pause"):
+		$CanvasLayer/PausePanel.show()
+		get_tree().paused = true

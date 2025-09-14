@@ -1,10 +1,58 @@
-[gd_scene load_steps=3 format=3 uid="uid://3iay6ji5nbek"]
+[gd_scene load_steps=4 format=3 uid="uid://3iay6ji5nbek"]
 
 [ext_resource type="PackedScene" uid="uid://bynqkp5rcr2mr" path="res://ScriptsAndScenes/lighting.tscn" id="1_1unmu"]
-[ext_resource type="PackedScene" uid="uid://clpoi7ggf0pur" path="res://ScriptsAndScenes/map.tscn" id="2_imgg4"]
+[ext_resource type="Script" uid="uid://8naiq1jhcg7c" path="res://ScriptsAndScenes/Game.gd" id="1_imgg4"]
+[ext_resource type="Script" uid="uid://bxbctg4cpckuq" path="res://ScriptsAndScenes/pause_options.gd" id="3_imgg4"]
 
-[node name="Game" type="Node3D"]
+[node name="Game" type="Node"]
+script = ExtResource("1_imgg4")
 
-[node name="Lighting" parent="." instance=ExtResource("1_1unmu")]
+[node name="Background" type="CanvasLayer" parent="."]
 
-[node name="Map" parent="." instance=ExtResource("2_imgg4")]
+[node name="3D" type="CanvasLayer" parent="."]
+
+[node name="Lighting" parent="3D" instance=ExtResource("1_1unmu")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PausePanel" type="PanelContainer" parent="CanvasLayer"]
+process_mode = 2
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PausePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 20
+
+[node name="PauseOptions" type="VBoxContainer" parent="CanvasLayer/PausePanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+script = ExtResource("3_imgg4")
+
+[node name="Label" type="Label" parent="CanvasLayer/PausePanel/MarginContainer/PauseOptions"]
+layout_mode = 2
+text = "Game paused"
+
+[node name="Resume" type="Button" parent="CanvasLayer/PausePanel/MarginContainer/PauseOptions"]
+layout_mode = 2
+text = "Resume"
+
+[node name="Menu" type="Button" parent="CanvasLayer/PausePanel/MarginContainer/PauseOptions"]
+layout_mode = 2
+text = "Main Menu"
+
+[connection signal="pressed" from="CanvasLayer/PausePanel/MarginContainer/PauseOptions/Resume" to="CanvasLayer/PausePanel/MarginContainer/PauseOptions" method="_on_resume_pressed"]
+[connection signal="pressed" from="CanvasLayer/PausePanel/MarginContainer/PauseOptions/Menu" to="CanvasLayer/PausePanel/MarginContainer/PauseOptions" method="_on_menu_pressed"]
