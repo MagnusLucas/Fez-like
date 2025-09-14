@@ -10,7 +10,6 @@ texture_filter = 1
 repeat_size = Vector2(794, 0)
 
 [node name="SkySprite2D" type="Sprite2D" parent="Parallax2D"]
-z_index = -10
 texture_filter = 1
 texture_repeat = 1
 position = Vector2(215, 319)

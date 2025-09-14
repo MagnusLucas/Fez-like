@@ -5,7 +5,7 @@ const GAME = preload("res://ScriptsAndScenes/game.tscn")
 
 static func instantiate(gridmap : Map) -> Game:
 	var game : Game = GAME.instantiate()
-	var world_3d : CanvasLayer = game.find_child("3D")
+	var world_3d : SubViewport = game.find_child("SubViewport")
 	world_3d.add_child(gridmap)
 	return game
 
