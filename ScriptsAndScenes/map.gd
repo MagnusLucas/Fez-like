@@ -83,6 +83,8 @@ func calculate_axis_visibility(new_basis : Basis) -> void:
 				visible_cells[cell_coordinates] = get_visible_cells_in_axis(cell_coordinates, new_camera_normal)
 	return
 
+func get_axis_coords(point_on_axis : Vector3i, axis : Vector3i = camera_origin.get_camera_normal()) -> Vector3i:
+	return point_on_axis * (Vector3i.ONE - abs(axis))
 
 func neighbourhood_conditions_fulfilled(cell_position : Vector3i, 
 		conditions : Array[Condition]) -> bool:
