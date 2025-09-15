@@ -16,18 +16,24 @@ z_index = -1000
 [node name="3D" type="CanvasLayer" parent="."]
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="3D"]
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="3D/SubViewportContainer"]
 transparent_bg = true
+handle_input_locally = false
 size = Vector2i(1152, 648)
+render_target_update_mode = 4
 
 [node name="Lighting" parent="3D/SubViewportContainer/SubViewport" instance=ExtResource("1_1unmu")]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Controls" type="CanvasLayer" parent="."]
 
-[node name="PausePanel" type="PanelContainer" parent="CanvasLayer"]
+[node name="PausePanel" type="PanelContainer" parent="Controls"]
 process_mode = 2
 visible = false
 anchors_preset = 8
@@ -42,31 +48,31 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PausePanel"]
+[node name="MarginContainer" type="MarginContainer" parent="Controls/PausePanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 20
 
-[node name="PauseOptions" type="VBoxContainer" parent="CanvasLayer/PausePanel/MarginContainer"]
+[node name="PauseOptions" type="VBoxContainer" parent="Controls/PausePanel/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 20
 script = ExtResource("3_imgg4")
 
-[node name="Label" type="Label" parent="CanvasLayer/PausePanel/MarginContainer/PauseOptions"]
+[node name="Label" type="Label" parent="Controls/PausePanel/MarginContainer/PauseOptions"]
 layout_mode = 2
 text = "Game paused"
 
-[node name="Resume" type="Button" parent="CanvasLayer/PausePanel/MarginContainer/PauseOptions"]
+[node name="Resume" type="Button" parent="Controls/PausePanel/MarginContainer/PauseOptions"]
 layout_mode = 2
 text = "Resume"
 
-[node name="Menu" type="Button" parent="CanvasLayer/PausePanel/MarginContainer/PauseOptions"]
+[node name="Menu" type="Button" parent="Controls/PausePanel/MarginContainer/PauseOptions"]
 layout_mode = 2
 text = "Main Menu"
 
-[node name="FinishPanel" type="PanelContainer" parent="CanvasLayer"]
+[node name="FinishPanel" type="PanelContainer" parent="Controls"]
 process_mode = 2
 visible = false
 anchors_preset = 8
@@ -81,26 +87,26 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/FinishPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="Controls/FinishPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 20
 
-[node name="PauseOptions" type="VBoxContainer" parent="CanvasLayer/FinishPanel/MarginContainer"]
+[node name="PauseOptions" type="VBoxContainer" parent="Controls/FinishPanel/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 20
 script = ExtResource("3_imgg4")
 
-[node name="Label" type="Label" parent="CanvasLayer/FinishPanel/MarginContainer/PauseOptions"]
+[node name="Label" type="Label" parent="Controls/FinishPanel/MarginContainer/PauseOptions"]
 layout_mode = 2
 text = "Level solved!"
 
-[node name="Menu" type="Button" parent="CanvasLayer/FinishPanel/MarginContainer/PauseOptions"]
+[node name="Menu" type="Button" parent="Controls/FinishPanel/MarginContainer/PauseOptions"]
 layout_mode = 2
 text = "Main Menu"
 
-[connection signal="pressed" from="CanvasLayer/PausePanel/MarginContainer/PauseOptions/Resume" to="CanvasLayer/PausePanel/MarginContainer/PauseOptions" method="_on_resume_pressed"]
-[connection signal="pressed" from="CanvasLayer/PausePanel/MarginContainer/PauseOptions/Menu" to="CanvasLayer/PausePanel/MarginContainer/PauseOptions" method="_on_menu_pressed"]
-[connection signal="pressed" from="CanvasLayer/FinishPanel/MarginContainer/PauseOptions/Menu" to="CanvasLayer/FinishPanel/MarginContainer/PauseOptions" method="_on_menu_pressed"]
+[connection signal="pressed" from="Controls/PausePanel/MarginContainer/PauseOptions/Resume" to="Controls/PausePanel/MarginContainer/PauseOptions" method="_on_resume_pressed"]
+[connection signal="pressed" from="Controls/PausePanel/MarginContainer/PauseOptions/Menu" to="Controls/PausePanel/MarginContainer/PauseOptions" method="_on_menu_pressed"]
+[connection signal="pressed" from="Controls/FinishPanel/MarginContainer/PauseOptions/Menu" to="Controls/FinishPanel/MarginContainer/PauseOptions" method="_on_menu_pressed"]

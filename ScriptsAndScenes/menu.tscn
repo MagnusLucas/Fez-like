@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://cark5yx3i7eof"]
+[gd_scene load_steps=7 format=3 uid="uid://cark5yx3i7eof"]
 
 [ext_resource type="PackedScene" uid="uid://biud0s3t8junj" path="res://ScriptsAndScenes/sky_node_2d.tscn" id="1_ard4b"]
 [ext_resource type="PackedScene" uid="uid://il35stenicx1" path="res://ScriptsAndScenes/Maps/lvl_1_mag.tscn" id="2_611xn"]
 [ext_resource type="Script" uid="uid://b4ngoy5bcvfsb" path="res://ScriptsAndScenes/pick_level.gd" id="2_c8f5b"]
 [ext_resource type="PackedScene" uid="uid://bdig1s5ulxppw" path="res://ScriptsAndScenes/Maps/lvl_3_mag.tscn" id="2_kdlt3"]
 [ext_resource type="PackedScene" uid="uid://b5rb358lk6hpf" path="res://ScriptsAndScenes/Maps/lvl_2_mag.tscn" id="3_611xn"]
+[ext_resource type="PackedScene" uid="uid://clpoi7ggf0pur" path="res://ScriptsAndScenes/Maps/map.tscn" id="6_c8f5b"]
 
 [node name="Menu" type="Node"]
 
@@ -79,6 +80,14 @@ text = "3"
 script = ExtResource("2_c8f5b")
 level = ExtResource("2_611xn")
 
+[node name="Button4" type="Button" parent="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "4"
+script = ExtResource("2_c8f5b")
+level = ExtResource("6_c8f5b")
+
 [connection signal="pressed" from="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels/Button" to="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels/Button" method="_on_pressed"]
 [connection signal="pressed" from="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels/Button2" to="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels/Button2" method="_on_pressed"]
 [connection signal="pressed" from="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels/Button3" to="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels/Button3" method="_on_pressed"]
+[connection signal="pressed" from="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels/Button4" to="Controls/Margin/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Levels/Button4" method="_on_pressed"]

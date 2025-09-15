@@ -114,11 +114,10 @@ func _handle_hiding_one_new(new_cell : Vector3i,
 	#print("Simple hiding ", Condition.vec_to_string(direction_local))
 	match direction_local:
 		Vector3i.UP:
-			if _wont_collide([new_cell]):
-				var conditions : Array[Condition] = current_condition
-				conditions.append(Condition.new("UP", Globals.EMPTY_CELL, true))
-				var correct_cell = map.find_cell(player_position, conditions)
-				move_to_cell(correct_cell)
+			var conditions : Array[Condition] = current_condition
+			conditions.append(Condition.new("UP", Globals.EMPTY_CELL, true))
+			var correct_cell = map.find_cell(player_position, conditions)
+			move_to_cell(correct_cell)
 		Vector3i.DOWN:
 			if _wont_collide([new_cell]):
 				var conditions : Array[Condition] = current_condition
@@ -185,9 +184,9 @@ func _handle_hiding_two_new(current_cells : Array[Vector3i],
 			var correct_cell = map.find_cell(player_position, conditions)
 			if correct_cell != null:
 				# Check if the player is becoming fully invisible after tp
-				#var future_cells : Array[Vector3i] = Globals.subtract_vector_from_each(directional_to_new, -correct_cell)
-				#future_cells += Globals.subtract_vector_from_each(current_cells, player_position - Vector3i(correct_cell))
-				#if _is_player_visibile(future_cells) != false:
+				var directional_to_new : Array[Vector3i] = Globals.subtract_vector_from_each(new_cells, player_position)
+				var future_cells : Array[Vector3i] = Globals.subtract_vector_from_each(directional_to_new, -correct_cell)
+				if _is_player_visibile(future_cells) != false:
 					move_to_cell(correct_cell)
 		Vector3i.DOWN:
 			if _wont_collide(new_cells):
@@ -201,7 +200,14 @@ func _handle_hiding_two_new(current_cells : Array[Vector3i],
 					conditions.append(Condition.new(
 						to_local(new_cells[1] - player_position),
 						Globals.GROUND_CELLS))
-					move_if_possible(player_position, conditions)
+					if !move_if_possible(player_position, conditions):
+						conditions = current_conditions
+						conditions += [
+							Condition.new(to_local(new_cells[0] - player_position),
+								Globals.EMPTY_CELL),
+							Condition.new(to_local(new_cells[1] - player_position),
+								Globals.EMPTY_CELL)]
+						move_to_cell(map.find_cell(player_position, conditions))
 
 func _handle_no_visibility_change(current_cells : Array[Vector3i],
 		new_cells : Array[Vector3i], player_position : Vector3i) -> void:
@@ -228,12 +234,10 @@ func _handle_no_change_one_new(
 	
 	match direction_local:
 		Vector3i.UP:
-			if _will_collide([new_cell]):
-				var conditions : Array[Condition] = current_conditions
-				conditions.append(Condition.new("UP", Globals.EMPTY_CELL))
-				
-				var correct_cell = map.find_cell(player_position, conditions)
-				move_to_cell(correct_cell)
+			var conditions : Array[Condition] = current_conditions
+			conditions.append(Condition.new("UP", Globals.EMPTY_CELL))
+			var correct_cell = map.find_cell(player_position, conditions)
+			move_to_cell(correct_cell)
 		Vector3i.DOWN:
 			if _wont_collide([new_cell]):
 				var conditions : Array[Condition] = current_conditions
@@ -252,6 +256,18 @@ func _handle_no_change_one_new(
 						Condition.new(direction_local, Globals.EMPTY_CELL, true)]
 					if !move_if_possible(player_position, conditions):
 						_force_stop_player()
+			else:
+				if _is_player_visibile([player_position]) == false:
+					var conditions : Array[Condition] = current_conditions
+					conditions += [
+						Condition.new("DOWN", Globals.GROUND_CELLS),
+						Condition.new(direction_local, Globals.EMPTY_CELL, true)]
+					if !move_if_possible(player_position, conditions):
+						conditions = current_conditions
+						conditions += [
+							Condition.new(direction_local + Vector3i.DOWN, Globals.GROUND_CELLS),
+							Condition.new(direction_local, Globals.EMPTY_CELL, true)]
+						move_if_possible(player_position, conditions)
 
 func _handle_no_change_two_new(current_cells : Array[Vector3i],
 		new_cells : Array[Vector3i], player_position : Vector3i) -> void:
@@ -271,20 +287,29 @@ func _handle_no_change_two_new(current_cells : Array[Vector3i],
 				move_if_possible(player_position, conditions)
 		
 		Vector3i.DOWN:
-			if _wont_collide(new_cells):
-				var conditions : Array[Condition] = _get_current_conditions(
+			var current_conditions : Array[Condition] = _get_current_conditions(
 						current_cells, player_position)
+			if _wont_collide(new_cells):
+				var conditions : Array[Condition] = current_conditions
 				conditions.append(
 					Condition.new(to_local(new_cells[0] - player_position),
 						Globals.GROUND_CELLS))
 				
 				if !move_if_possible(player_position, conditions):
-					conditions =  _get_current_conditions(
-							current_cells, player_position)
+					conditions =  current_conditions
 					conditions.append(
 						Condition.new(to_local(new_cells[1] - player_position),
 							Globals.GROUND_CELLS))
-					move_if_possible(player_position, conditions)
+					if !move_if_possible(player_position, conditions):
+						if _is_player_visibile(current_cells) == false:
+							conditions = current_conditions
+							conditions.append(
+								Condition.new(to_local(new_cells[0] - player_position),
+									Globals.EMPTY_CELL))
+							conditions.append(
+								Condition.new(to_local(new_cells[1] - player_position),
+									Globals.EMPTY_CELL))
+							move_if_possible(player_position, conditions)
 
 func _visibility_change(old_cells : Array[Vector3i], 
 		new_cells : Array[Vector3i]) -> float:
